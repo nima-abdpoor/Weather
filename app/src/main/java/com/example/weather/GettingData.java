@@ -3,6 +3,10 @@ package com.example.weather;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.text.Html;
+import android.util.Log;
+
+import androidx.fragment.app.Fragment;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -18,14 +22,14 @@ import java.util.Locale;
 
 import static com.example.weather.MainActivity.DEFAULT_TEMP;
 
-public class GettingData extends AsyncTask<String ,String ,String>{
+public class GettingData extends Fragment{
     Context context;
 
     private double longitude ;
     private double latitude;
     private int weatherId;
     private String icon="";
-    private double tempAverage ;
+    private int tempAverage ;
     private double tempMin ;
     private double tempMax ;
     private int pressure ;
@@ -36,31 +40,15 @@ public class GettingData extends AsyncTask<String ,String ,String>{
     private String country;
     private int cityId;
     private String city;
+    private String detail;
 
     public static final String key="b34d97936eaadfa405d3b9b18db6a0ff";
     public static String URL="https://api.openweathermap.org/data/2.5/weather?q=%s&appid="+key;
 
     public GettingData(Context context){
         this.context=context;
-    }
-
-    @Override
-    protected void onPreExecute()
-    {
-
-    }
-
-    @Override
-    protected String doInBackground(String... params) {
         city= String.valueOf(MainActivity.city.getText());
         RequestData(URL,getCity());
-        return "";
-    }
-
-
-    @Override
-    protected void onPostExecute(String result) {
-
     }
 
 
@@ -71,10 +59,14 @@ public class GettingData extends AsyncTask<String ,String ,String>{
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    setCity(response.getString("name"));
-                    setTempAverage(response.getJSONObject("main").getDouble("temp"));
+                    setCity(response.getString("name")+", "+response.getJSONObject("sys").getString("country"));
+                    setTempAverage(response.getJSONObject("main").getInt("temp"));
+                    setIcon(response.getJSONArray("weather").getJSONObject(0).getString("icon"));
+                    setDetail(response.getJSONArray("weather").getJSONObject(0).getString("description"));
                     SetView();
+                    Log.i("salam",getCity());
                 } catch (JSONException e) {
+                    Log.i("solam",e.getMessage());
                     e.printStackTrace();
                 }
             }
@@ -97,7 +89,9 @@ public class GettingData extends AsyncTask<String ,String ,String>{
 
     public void SetView(){
         WeatherView.city.setText(getCity());
-        WeatherView.temp.setText(String.valueOf(getTempAverage(DEFAULT_TEMP)));
+        WeatherView.temp.setText(getTempAverage(DEFAULT_TEMP));
+        WeatherView.detail.setText(getDetail());
+        getIcon();
     }
 
     public void setCity(String city) {
@@ -120,7 +114,7 @@ public class GettingData extends AsyncTask<String ,String ,String>{
         this.icon = icon;
     }
 
-    public void setTempAverage(double tempAverage) {
+    public void setTempAverage(int tempAverage) {
         this.tempAverage = tempAverage;
     }
 
@@ -160,6 +154,10 @@ public class GettingData extends AsyncTask<String ,String ,String>{
         this.cityId = cityId;
     }
 
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
+
     public double getLongitude() {
         return longitude;
     }
@@ -173,20 +171,66 @@ public class GettingData extends AsyncTask<String ,String ,String>{
     }
 
     public String getIcon() {
+         if(icon.contains("01")|| icon.contains("02")||icon.contains("10")){
+            switch (icon){
+                case "01d":
+                    WeatherView.stateicon.setImageResource(R.drawable.clearskyd);
+                    break;
+                case "01n":
+                    WeatherView.stateicon.setImageResource(R.drawable.clearskyn);
+                    break;
+                case "02d":
+                    WeatherView.stateicon.setImageResource(R.drawable.fewcloudsd);
+                    break;
+                case "02n":
+                    WeatherView.stateicon.setImageResource(R.drawable.fewcloudsn);
+                    break;
+                case "10d":
+                    WeatherView.stateicon.setImageResource(R.drawable.raind);
+                    break;
+                case "10n":
+                    WeatherView.stateicon.setImageResource(R.drawable.rainn);
+                    break;
+            }
+        }
+        else {
+            icon=icon.substring(0,2);
+            switch (icon){
+                case "03":
+                    WeatherView.stateicon.setImageResource(R.drawable.scatterdcloudsd);
+                    break;
+                case "04":
+                    WeatherView.stateicon.setImageResource(R.drawable.brokencloudsd);
+                    break;
+                case "09":
+                    WeatherView.stateicon.setImageResource(R.drawable.showerraind);
+                    break;
+                case "11":
+                    WeatherView.stateicon.setImageResource(R.drawable.thunderstormd);
+                    break;
+                case "13":
+                    WeatherView.stateicon.setImageResource(R.drawable.snow);
+                    break;
+                case "50":
+                    WeatherView.stateicon.setImageResource(R.drawable.mist);
+                    break;
+            }
+        }
+
         return icon;
     }
 
-    public double getTempAverage(String type) {
+    public String getTempAverage(String type) {
         switch (type){
             case  "Kelvin":
-                return tempAverage;
+                return (String.valueOf(tempAverage));
             case "Celsius":
-                return ((int)tempAverage-273);
+                return (String.valueOf((tempAverage-273))+ Html.fromHtml("&#8451;"));
             case "Fahrenheit":
-                return ((int)((tempAverage-273)*1.8)+32);
+                return String.valueOf((((tempAverage-273)*1.8)+32));
             default:break;
         }
-        return tempAverage;
+        return String.valueOf(tempAverage);
     }
 
     public double getTempMin() {
@@ -228,10 +272,13 @@ public class GettingData extends AsyncTask<String ,String ,String>{
     public String getCity() {
         switch (city){
             case "Tehran":
-                WeatherView.cardView.setBackgroundResource(R.drawable.damavand);
+               // WeatherView.cardView.setBackgroundResource(R.drawable.damavand);
                 break;
             default:break;
         }
         return city;
+    }
+    public String getDetail() {
+        return detail;
     }
 }

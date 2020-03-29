@@ -9,6 +9,7 @@
     app:cardCornerRadius="8dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <RelativeLayout
+        android:layout_margin="20dp"
         android:layout_width="match_parent"
         android:layout_height="200dp">
 
@@ -20,6 +21,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:textSize="16sp"
+            android:textStyle="italic"
             />
 
         <ImageView
@@ -36,7 +38,25 @@
             android:textSize="26sp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            />
+        <TextView
+            android:id="@+id/test"
+            android:text=""
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
             android:layout_margin="20dp"
+            />
+
+        <TextView
+            android:id="@+id/detail"
+            android:layout_alignParentBottom="true"
+            android:textSize="16sp"
+            android:layout_centerHorizontal="true"
+           android:layout_margin="10dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
             />
     </RelativeLayout>
 

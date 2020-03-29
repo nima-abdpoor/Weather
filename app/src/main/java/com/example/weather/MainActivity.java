@@ -12,7 +12,7 @@ import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
     public static String  [] TEMP_TYPE = new String[]{"Kelvin","Celsius","Fahrenheit"};
-    public static String DEFAULT_TEMP=TEMP_TYPE[2];
+    public static String DEFAULT_TEMP=TEMP_TYPE[1];
     static EditText city;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
