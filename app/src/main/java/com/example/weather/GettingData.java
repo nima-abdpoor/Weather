@@ -1,8 +1,6 @@
 package com.example.weather;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.text.Html;
 import android.util.Log;
 

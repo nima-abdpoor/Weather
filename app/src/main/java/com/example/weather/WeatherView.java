@@ -3,7 +3,10 @@ package com.example.weather;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,5 +39,16 @@ public class WeatherView extends AppCompatActivity {
         new GettingData(this);
     }
 
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add("Locations").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent intent=new Intent(WeatherView.this,SearchCity.class);
+                startActivity(intent);
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+    }
 }
