@@ -1,5 +1,6 @@
 package com.example.weather;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.text.Html;
 import android.util.Log;
@@ -46,12 +47,14 @@ public class GettingData extends Fragment{
     public GettingData(Context context){
         this.context=context;
         city= String.valueOf(MainActivity.city.getText());
-        RequestData(URL,getCity());
+        RequestData(URL);
+    }
+    public GettingData(Context context,String id){
+        RequestData("https://api.openweathermap.org/data/2.5/weather?id="+id+"&appid=b34d97936eaadfa405d3b9b18db6a0ff");
     }
 
-
-    public void RequestData(String uri, String city) {
-        uri =String.format(Locale.getDefault(),uri,city);
+    public void RequestData(String uri) {
+        uri =String.format(Locale.getDefault(),uri,getCity());
         JsonObjectRequest request=new JsonObjectRequest(Request.Method.GET,
                 uri, null, new Response.Listener<JSONObject>() {
             @Override

@@ -14,14 +14,13 @@ public class CityModel {
     private String country="";
     private boolean selected =false;
 
-    public static ContentValues CreateContentValues(int id,double lat,double lon,String name,String country,Boolean selected){
+    public static ContentValues CreateContentValues(int id,String name,double lat,double lon,String country){
         ContentValues contentValues =new ContentValues();
-        contentValues.put("id",id);
-        contentValues.put("name",name);
-        contentValues.put("lat",lat);
-        contentValues.put("lon",lon);
-        contentValues.put("country",country);
-        contentValues.put("SELECTED",selected ? 1 : 0);
+        contentValues.put("ID",id);
+        contentValues.put("NAME",name);
+        contentValues.put("LAT",lat);
+        contentValues.put("LON",lon);
+        contentValues.put("COUNTRY",country);
         return contentValues;
     }
 
@@ -82,21 +81,20 @@ public class CityModel {
 
     public ContentValues GetcontentValues(){
         ContentValues contentValues =new ContentValues();
-        contentValues.put("id",id);
-        contentValues.put("name",name);
-        contentValues.put("lat",lat);
-        contentValues.put("lon",lon);
-        contentValues.put("country",country);
-        contentValues.put("SELECTED",selected ? 1 : 0);
+        contentValues.put("ID",id);
+        contentValues.put("NAME",name);
+        contentValues.put("LAT",lat);
+        contentValues.put("LON",lon);
+        contentValues.put("COUNTRY",country);
         return contentValues;
     }
     public static CityModel CursorToCityModel(Cursor cursor){
         CityModel city=new CityModel();
-        city.setId(cursor.getLong(cursor.getColumnIndex("id")));
-        city.setName(cursor.getString(cursor.getColumnIndex("name")));
-        city.setLat(cursor.getDouble(cursor.getColumnIndex("lat")));
-        city.setLon(cursor.getDouble(cursor.getColumnIndex("lon")));
-        city.setCountry(cursor.getString(cursor.getColumnIndex("countryCode")));
+        city.setId(cursor.getLong(cursor.getColumnIndex("ID")));
+        city.setName(cursor.getString(cursor.getColumnIndex("NAME")));
+        city.setLat(cursor.getDouble(cursor.getColumnIndex("LAT")));
+        city.setLon(cursor.getDouble(cursor.getColumnIndex("LON")));
+        city.setCountry(cursor.getString(cursor.getColumnIndex("COUNTRY")));
         return city;
     }
 }

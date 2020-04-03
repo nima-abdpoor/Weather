@@ -1,5 +1,6 @@
 package com.example.weather;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,7 +14,6 @@ import android.widget.SearchView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
 
 import data.CityDbHelper;
@@ -37,7 +37,7 @@ public class SearchCity extends AppCompatActivity {
 
     private void gettingcities(String searchWord,int length) {
         List<CityModel> SearchList=new ArrayList<>();
-        CityDbHelper dbHelper=new CityDbHelper(this);
+        final CityDbHelper dbHelper=new CityDbHelper(this);
         if (length <4)
         SearchList= dbHelper.searchCityByName(searchWord,"20");
         else {
@@ -49,7 +49,10 @@ public class SearchCity extends AppCompatActivity {
         citiesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                
+                String city= citiesList.getItemAtPosition(position).toString();
+                dbHelper.Add_DeleteCityFromData(city,true);
+                Intent intent=new Intent(SearchCity.this,Activity_cities.class);
+                startActivity(intent);
             }
         });
     }

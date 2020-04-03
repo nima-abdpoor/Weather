@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
         thread.start();
         setContentView(R.layout.activity_main);
         VerifingViewItems();
-
     }
 
     private void VerifingViewItems() {
@@ -52,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void putcitytodatabase() {
         CityDbHelper cityDbHelper=new CityDbHelper(this);
-        cityDbHelper.getcities(null,null);
     }
 
 }

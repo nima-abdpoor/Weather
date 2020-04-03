@@ -49,6 +49,14 @@ public class WeatherView extends AppCompatActivity {
                 return false;
             }
         });
+        menu.add("My Cities").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent intent=new Intent(WeatherView.this,Activity_cities.class);
+                startActivity(intent);
+                return false;
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 }

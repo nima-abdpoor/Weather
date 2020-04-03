@@ -3,6 +3,7 @@ package data;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -20,18 +21,24 @@ import java.util.List;
 public class CityDbHelper extends SQLiteOpenHelper {
 
     Context context;
-    private static final String [] ALL_COLUMNS ={"id","name","lat","lon","countryCode"};
-    public static final int DB_VERSION = 2;
-    public static final String TABLE_NAME ="tb_city";
-    public static final String DB_NAME="db_city";
+    private static final String [] ALL_COLUMNS_CITY ={"ID","NAME","LAT","LON","COUNTRY"};
+    private static final String [] ALL_COLUMNS_MY_CITIES ={"ID","NAME","SELECTED"};
+    public static final int DB_VERSION = 1;
+    public static final String TABLE_NAME ="TABLE_CITY";
+    public static final String MY_CITIES_TABLE ="MY_CITIES";
+    public static final String DB_NAME="DB_CITY";
     private final String CMD_CREATE_TABLE="CREATE TABLE IF NOT EXISTS "+ TABLE_NAME + "("+
-            "'id' INTEGER PRIMARY KEY NOT NULL, " +
-            "'name' TEXT , " +
-            "'lat' DOUBLE, " +
-            "'lon' DOUBLE, " +
-            "'countryCode' TEXT, " +
-            "'selected' INTEGER" +
+            "'ID' INTEGER PRIMARY KEY NOT NULL, " +
+            "'NAME' TEXT , " +
+            "'LAT' DOUBLE, " +
+            "'LON' DOUBLE, " +
+            "'COUNTRY' TEXT " +
             " ) ";
+    private final String CMD_CREATE_MY_CITIES="CREATE TABLE IF NOT EXISTS "+ MY_CITIES_TABLE + "("+
+            "'ID' INTEGER PRIMARY KEY NOT NULL, "+
+            "'NAME' TEXT , "+
+            "'SELECTED' INTEGER "+
+            " )";
 
     public CityDbHelper( Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -41,11 +48,13 @@ public class CityDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CMD_CREATE_TABLE);
+        db.execSQL(CMD_CREATE_MY_CITIES);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS "+ TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS "+MY_CITIES_TABLE);
         onCreate(db);
     }
     public void InitContents(){
@@ -58,19 +67,21 @@ public class CityDbHelper extends SQLiteOpenHelper {
                     BufferedReader reader=new BufferedReader(new InputStreamReader(inputStream));
                     String line="";
                     while ((line =reader.readLine()) != null){
-                        String [] token=line.split("\t");
-                        if(token.length == 5){
+                        String [] token=line.split(",");
+                        if(token.length != 5){
                             continue;
                         }
                         Long id =db.insert(TABLE_NAME,null,CityModel.CreateContentValues(Integer.valueOf(token[0]),
-                                Double.valueOf(token[1]),Double.valueOf(token[2]),token[3],token[4],false));
-
+                                token[1],Double.valueOf(token[2]),Double.valueOf(token[3]),token[4]));
                         Log.i("dbhelper","data inserted : "+id);
                     }
                     db.close();
                 }
                 catch (IOException IE){
-                    Log.i("EROR",IE.getMessage());
+                    Log.i("ERROR",IE.getMessage());
+                }
+                catch (SQLiteConstraintException se){
+                    Log.i("dbhelper",se.getMessage());
                 }
             }
         });
@@ -84,7 +95,7 @@ public class CityDbHelper extends SQLiteOpenHelper {
     public List<CityModel> getcities(String selection,String[] selectionarges){
         List<CityModel> citylist= new ArrayList<>();
         SQLiteDatabase db=getWritableDatabase();
-        Cursor cursor=db.query(TABLE_NAME,ALL_COLUMNS,selection,selectionarges,null,null,"NAME");
+        Cursor cursor=db.query(TABLE_NAME, ALL_COLUMNS_CITY,selection,selectionarges,null,null,"NAME");
         Log.i("dbhelper","cursor returned "+cursor.getCount()+"records");
         if (cursor.moveToFirst()){
             do {
@@ -98,15 +109,15 @@ public class CityDbHelper extends SQLiteOpenHelper {
     public void UpdateCitySelected(Long id,Boolean selected){
         SQLiteDatabase sqLiteDatabase=getWritableDatabase();
         ContentValues cv=new ContentValues();
-        cv.put("selected",selected ? 1:0);
-        sqLiteDatabase.update(TABLE_NAME,cv,"id ="+id,null);
+        cv.put("SELECTED",selected ? 1:0);
+        sqLiteDatabase.update(MY_CITIES_TABLE,cv,"ID ="+id,null);
         sqLiteDatabase.close();
     }
     public List<CityModel> searchCityByName(String cityname, String limit){
         List<CityModel> citylist = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.query(true, TABLE_NAME, ALL_COLUMNS,
-                "name LIKE '" + cityname + "%'" ,
+        Cursor cursor = db.query(true, TABLE_NAME, ALL_COLUMNS_CITY,
+                "NAME LIKE '" + cityname + "%'" ,
                 null, null, null, null, limit);
         if(cursor.moveToFirst()){
             do{
@@ -116,5 +127,72 @@ public class CityDbHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return citylist;
+    }
+    public String getId(String name,String country,String lat){
+        String id="";
+        List<CityModel> s=new ArrayList<>();
+        SQLiteDatabase database=getReadableDatabase();
+        Cursor cursor = database.query(true, TABLE_NAME, ALL_COLUMNS_CITY,
+                "NAME LIKE '" + name.toLowerCase()+"' AND COUNTRY LIKE '"
+                        +country.toLowerCase()+"'",
+                null, null, null, null, "20");
+        if (cursor.moveToFirst()){
+            id= String.valueOf(cursor.getLong(cursor.getColumnIndex("ID")));
+            return id;
+        }
+        return "0";
+    }
+    public void Add_DeleteCityFromData(String parameter,boolean add_remove){
+        String [] token;
+        String [] nameandcountry;
+        String country;
+        String name1 ="";
+        String lat ="";
+        token  =parameter.split("\n");
+        nameandcountry=token[0].trim().split(",");
+        name1=nameandcountry[0];
+        country=nameandcountry[1].trim();
+        lat=token[1].substring(token[1].lastIndexOf(": ")+2);
+        Log.i("rrrr",name1+"\n"+country+"\n"+lat);
+        String id = getId(name1,country,lat);
+        SQLiteDatabase sqLiteDatabase=getWritableDatabase();
+        ContentValues cv=new ContentValues();
+        cv.put("ID",id);
+        cv.put("SELECTED",1);
+        sqLiteDatabase.insert(MY_CITIES_TABLE,null,cv);
+        sqLiteDatabase.update(MY_CITIES_TABLE,cv,"ID = "+id,null);
+        sqLiteDatabase.close();
+    }
+    public List<String> GetMyCitiesId(){
+        SQLiteDatabase sqLiteDatabase=getReadableDatabase();
+        List<String> MyCities=new ArrayList<>();
+        Cursor cursor=sqLiteDatabase.query(true,MY_CITIES_TABLE,ALL_COLUMNS_MY_CITIES,
+                "SELECTED = 1",null,null,null,"NAME",null);
+        if (cursor.moveToFirst()){
+            do {
+                Log.i("getcity", String.valueOf(cursor.getLong(cursor.getColumnIndex("ID"))));
+                MyCities.add(String.valueOf(cursor.getLong(cursor.getColumnIndex("ID"))));
+            }while (cursor.moveToNext());
+        }
+        return MyCities;
+    }
+    public String IdToName(long id){
+        String name="";
+        String country="";
+        SQLiteDatabase db=getReadableDatabase();
+        Cursor cursor=db.query(true,TABLE_NAME,ALL_COLUMNS_CITY,
+                "ID ="+id,null,null,null,null,null);
+        if (cursor.moveToFirst()){
+            do {
+                name=cursor.getString(cursor.getColumnIndex("NAME"));
+                country=cursor.getString(cursor.getColumnIndex("COUNTRY"));
+            }while (cursor.moveToNext());
+        }
+        return name+", "+country;
+    }
+
+    public void DeleteUnUsedInfo() {
+        SQLiteDatabase sqLiteDatabase=getWritableDatabase();
+        sqLiteDatabase.delete(MY_CITIES_TABLE,"ID = 0",null);
     }
 }
