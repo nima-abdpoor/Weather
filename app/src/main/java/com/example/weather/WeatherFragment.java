@@ -1,10 +1,17 @@
 package com.example.weather;
 
-import android.content.ContentValues;
 import android.content.Context;
+import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.android.volley.Request;
@@ -21,8 +28,12 @@ import java.util.Locale;
 
 import static com.example.weather.MainActivity.DEFAULT_TEMP;
 
-public class GettingData{
-    Context context;
+public class WeatherFragment extends Fragment {
+    static TextView City,temp, Detail;
+    static ImageView Icon;
+
+     Context context;
+     private String ID="";
 
     private double longitude ;
     private double latitude;
@@ -41,21 +52,34 @@ public class GettingData{
     private String city;
     private String detail;
 
-    public static final String key="b34d97936eaadfa405d3b9b18db6a0ff";
-    public static String URL="https://api.openweathermap.org/data/2.5/weather?q=%s&appid="+key;
+    private static String URL="https://api.openweathermap.org/data/2.5/weather?" +
+            "id=%s&appid=b34d97936eaadfa405d3b9b18db6a0ff";
 
-
-    public GettingData(Context context){
-        this.context=context;
-        city= String.valueOf(MainActivity.city.getText());
-        RequestData(URL);
-    }
-    public GettingData(Context context,String id){
-        RequestData("https://api.openweathermap.org/data/2.5/weather?id="+id+"&appid=b34d97936eaadfa405d3b9b18db6a0ff");
+    public static WeatherFragment newInstance(String ID) {
+        WeatherFragment fragment =new WeatherFragment();
+        Bundle args = new Bundle();
+        args.putString("ID",ID);
+        fragment.setArguments(args);
+        return fragment;
     }
 
-    public void RequestData(String uri) {
-        uri =String.format(Locale.getDefault(),uri,getCity());
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.ID=getArguments().getString("ID");
+        Log.i("gayidi",ID);
+        RequestData(URL,ID);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view=inflater.inflate(R.layout.card_weather,container,false);
+        City =view.findViewById(R.id.city);
+        temp=view.findViewById(R.id.temp);
+        Detail =view.findViewById(R.id.detail);
+        Icon =view.findViewById(R.id.icon);
+        String uri =String.format(Locale.getDefault(),URL,ID);
         JsonObjectRequest request=new JsonObjectRequest(Request.Method.GET,
                 uri, null, new Response.Listener<JSONObject>() {
             @Override
@@ -65,8 +89,11 @@ public class GettingData{
                     setTempAverage(response.getJSONObject("main").getInt("temp"));
                     setIcon(response.getJSONArray("weather").getJSONObject(0).getString("icon"));
                     setDetail(response.getJSONArray("weather").getJSONObject(0).getString("description"));
-                    SetView();
                     Log.i("salam",getCity());
+                    City.setText(getCity());
+                    temp.setText(getTempAverage(DEFAULT_TEMP));
+                    Detail.setText(getDetail());
+                    getIcon();
                 } catch (JSONException e) {
                     Log.i("solam",e.getMessage());
                     e.printStackTrace();
@@ -80,22 +107,26 @@ public class GettingData{
             }
         }
         );
-        RequestQueue requestQueue= Volley.newRequestQueue(context);
+        RequestQueue requestQueue= Volley.newRequestQueue(getContext());
         requestQueue.add(request);
+        return view;
     }
+
+
+
+    public void RequestData(String uri,String ID) {
+
+    }
+
+
     private void CityNotFound(VolleyError error){
-            WeatherView.city.setText("city not found");
+        City.setText("city not found");
     }
 
 
-
-    public void SetView(){
-        WeatherView.city.setText(getCity());
-        WeatherView.temp.setText(getTempAverage(DEFAULT_TEMP));
-        WeatherView.detail.setText(getDetail());
-        getIcon();
+    private void SetView(){
+        Log.i("citytest",getCity());
     }
-
     public void setCity(String city) {
         this.city = city;
     }
@@ -173,25 +204,25 @@ public class GettingData{
     }
 
     public String getIcon() {
-         if(icon.contains("01")|| icon.contains("02")||icon.contains("10")){
+        if(icon.contains("01")|| icon.contains("02")||icon.contains("10")){
             switch (icon){
                 case "01d":
-                    WeatherView.stateicon.setImageResource(R.drawable.clearskyd);
+                    Icon.setImageResource(R.drawable.clearskyd);
                     break;
                 case "01n":
-                    WeatherView.stateicon.setImageResource(R.drawable.clearskyn);
+                    Icon.setImageResource(R.drawable.clearskyn);
                     break;
                 case "02d":
-                    WeatherView.stateicon.setImageResource(R.drawable.fewcloudsd);
+                    Icon.setImageResource(R.drawable.fewcloudsd);
                     break;
                 case "02n":
-                    WeatherView.stateicon.setImageResource(R.drawable.fewcloudsn);
+                    Icon.setImageResource(R.drawable.fewcloudsn);
                     break;
                 case "10d":
-                    WeatherView.stateicon.setImageResource(R.drawable.raind);
+                    Icon.setImageResource(R.drawable.raind);
                     break;
                 case "10n":
-                    WeatherView.stateicon.setImageResource(R.drawable.rainn);
+                    Icon.setImageResource(R.drawable.rainn);
                     break;
             }
         }
@@ -199,22 +230,22 @@ public class GettingData{
             icon=icon.substring(0,2);
             switch (icon){
                 case "03":
-                    WeatherView.stateicon.setImageResource(R.drawable.scatterdcloudsd);
+                    Icon.setImageResource(R.drawable.scatterdcloudsd);
                     break;
                 case "04":
-                    WeatherView.stateicon.setImageResource(R.drawable.brokencloudsd);
+                    Icon.setImageResource(R.drawable.brokencloudsd);
                     break;
                 case "09":
-                    WeatherView.stateicon.setImageResource(R.drawable.showerraind);
+                    Icon.setImageResource(R.drawable.showerraind);
                     break;
                 case "11":
-                    WeatherView.stateicon.setImageResource(R.drawable.thunderstormd);
+                    Icon.setImageResource(R.drawable.thunderstormd);
                     break;
                 case "13":
-                    WeatherView.stateicon.setImageResource(R.drawable.snow);
+                    Icon.setImageResource(R.drawable.snow);
                     break;
                 case "50":
-                    WeatherView.stateicon.setImageResource(R.drawable.mist);
+                    Icon.setImageResource(R.drawable.mist);
                     break;
             }
         }
@@ -274,7 +305,7 @@ public class GettingData{
     public String getCity() {
         switch (city){
             case "Tehran":
-               // WeatherView.cardView.setBackgroundResource(R.drawable.damavand);
+                // .cardView.setBackgroundResource(R.drawable.damavand);
                 break;
             default:break;
         }
@@ -282,5 +313,13 @@ public class GettingData{
     }
     public String getDetail() {
         return detail;
+    }
+
+    public String getID() {
+        return ID;
+    }
+
+    public void setID(String ID) {
+        this.ID = ID;
     }
 }
