@@ -12,8 +12,11 @@ import androidx.viewpager.widget.ViewPager;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -38,6 +41,7 @@ import static com.example.weather.GettingData.key;
 import static com.example.weather.MainActivity.DEFAULT_TEMP;
 
 public class OtherCities extends AppCompatActivity {
+    ProgressBar progressBar;
     ViewPager viewPager;
     List<String> MyCities;
     List<Fragment> fragments;
@@ -49,22 +53,36 @@ public class OtherCities extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_other_cities);
         VeryfingViewItems();
+        progressBar.setVisibility(View.VISIBLE);
         Init();
     }
 
     private void VeryfingViewItems() {
+        progressBar=findViewById(R.id.progress_bar);
         viewPager=findViewById(R.id.view_pager);
     }
 
     private void Init() {
         requestQueue =Volley.newRequestQueue(this);
-       /* for (int i=0;i<MyCities.size();++i) {
-            //fragments.add(WeatherFragment.newInstance(cities[i]));
-        }*/
         RequestData();
         adapter=new MyPagerAdapter(getSupportFragmentManager(),fragments);
         viewPager.setAdapter(adapter);
     }
+
+    @Override
+    protected void onResume() {
+        RequestData();
+        super.onResume();
+        final Handler handler=new Handler();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                RequestData();
+                handler.postDelayed(this,10 *60*1000);
+            }
+        });
+    }
+
     public void RequestData() {
         fragments=new ArrayList<>();
         fragments.clear();
@@ -74,6 +92,7 @@ public class OtherCities extends AppCompatActivity {
                         @Override
                         public void onResponse(JSONObject response) {
                             try {
+                                progressBar.setVisibility(View.INVISIBLE);
                                 int cnt=response.getInt("cnt");
                                 JSONArray jsonArray=response.getJSONArray("list");
                                 for (int i=0;i<cnt;i++){
@@ -94,6 +113,7 @@ public class OtherCities extends AppCompatActivity {
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    progressBar.setVisibility(View.INVISIBLE);
                     Log.i("solam",error.getMessage());
                 }
             });
