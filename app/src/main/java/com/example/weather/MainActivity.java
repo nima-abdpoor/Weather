@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i("salamgo","ridi");
         Thread thread=new Thread(new Runnable() {
             @Override
             public void run() {

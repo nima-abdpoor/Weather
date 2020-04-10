@@ -5,6 +5,7 @@ import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -44,6 +45,7 @@ public class WeatherView extends AppCompatActivity {
         menu.add("Locations").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                Log.i("salamgoh","");
                 Intent intent=new Intent(WeatherView.this,SearchCity.class);
                 startActivity(intent);
                 return false;

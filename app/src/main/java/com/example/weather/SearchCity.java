@@ -24,7 +24,6 @@ public class SearchCity extends AppCompatActivity {
     ArrayAdapter<CityModel> adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_city);
         VirifingViewItems();
@@ -53,6 +52,7 @@ public class SearchCity extends AppCompatActivity {
                 dbHelper.Add_DeleteCityFromData(city,true);
                 Intent intent=new Intent(SearchCity.this,Activity_cities.class);
                 startActivity(intent);
+                finish();
             }
         });
     }

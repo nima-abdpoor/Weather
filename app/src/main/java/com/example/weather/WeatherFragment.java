@@ -55,10 +55,8 @@ public class WeatherFragment extends Fragment {
     private static String URL="https://api.openweathermap.org/data/2.5/weather?" +
             "id=%s&appid=b34d97936eaadfa405d3b9b18db6a0ff";
 
-    public static WeatherFragment newInstance(String ID) {
+    public static WeatherFragment newInstance(Bundle args) {
         WeatherFragment fragment =new WeatherFragment();
-        Bundle args = new Bundle();
-        args.putString("ID",ID);
         fragment.setArguments(args);
         return fragment;
     }
@@ -66,9 +64,11 @@ public class WeatherFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.ID=getArguments().getString("ID");
-        Log.i("gayidi",ID);
-        RequestData(URL,ID);
+        Bundle args=getArguments();
+        setCity(args.getString("city"));
+        setTempAverage(Integer.parseInt(args.getString("tempA")));
+        setDetail(args.getString("description"));
+        setIcon(args.getString("icon"));
     }
 
     @Nullable
@@ -79,54 +79,25 @@ public class WeatherFragment extends Fragment {
         temp=view.findViewById(R.id.temp);
         Detail =view.findViewById(R.id.detail);
         Icon =view.findViewById(R.id.icon);
-        String uri =String.format(Locale.getDefault(),URL,ID);
-        JsonObjectRequest request=new JsonObjectRequest(Request.Method.GET,
-                uri, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    setCity(response.getString("name")+", "+response.getJSONObject("sys").getString("country"));
-                    setTempAverage(response.getJSONObject("main").getInt("temp"));
-                    setIcon(response.getJSONArray("weather").getJSONObject(0).getString("icon"));
-                    setDetail(response.getJSONArray("weather").getJSONObject(0).getString("description"));
-                    Log.i("salam",getCity());
-                    City.setText(getCity());
-                    temp.setText(getTempAverage(DEFAULT_TEMP));
-                    Detail.setText(getDetail());
-                    getIcon();
-                } catch (JSONException e) {
-                    Log.i("solam",e.getMessage());
-                    e.printStackTrace();
-                }
-            }
-        }
-                , new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                CityNotFound(error);
-            }
-        }
-        );
-        RequestQueue requestQueue= Volley.newRequestQueue(getContext());
-        requestQueue.add(request);
+        SetView();
         return view;
     }
 
 
 
-    public void RequestData(String uri,String ID) {
-
+    private void SetView(){
+        City.setText(getCity());
+        temp.setText(getTempAverage(DEFAULT_TEMP));
+        Detail.setText(getDetail());
+        getIcon();
     }
+
 
 
     private void CityNotFound(VolleyError error){
         City.setText("city not found");
     }
 
-
-    private void SetView(){
-        Log.i("citytest",getCity());
-    }
     public void setCity(String city) {
         this.city = city;
     }

@@ -73,7 +73,6 @@ public class CityDbHelper extends SQLiteOpenHelper {
                         }
                         Long id =db.insert(TABLE_NAME,null,CityModel.CreateContentValues(Integer.valueOf(token[0]),
                                 token[1],Double.valueOf(token[2]),Double.valueOf(token[3]),token[4]));
-                        Log.i("dbhelper","data inserted : "+id);
                     }
                     db.close();
                 }
