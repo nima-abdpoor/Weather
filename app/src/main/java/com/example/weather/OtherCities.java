@@ -69,7 +69,7 @@ public class OtherCities extends AppCompatActivity {
         viewPager.setAdapter(adapter);
     }
 
-    @Override
+   /* @Override
     protected void onResume() {
         RequestData();
         super.onResume();
@@ -82,7 +82,7 @@ public class OtherCities extends AppCompatActivity {
             }
         });
     }
-
+*/
     public void RequestData() {
         fragments=new ArrayList<>();
         fragments.clear();
@@ -95,7 +95,8 @@ public class OtherCities extends AppCompatActivity {
                                 progressBar.setVisibility(View.INVISIBLE);
                                 int cnt=response.getInt("cnt");
                                 JSONArray jsonArray=response.getJSONArray("list");
-                                for (int i=0;i<cnt;i++){
+                                Log.i("fragmaentsize", String.valueOf(jsonArray.length()));
+                                for (int i=0;i<cnt;++i){
                                     JSONObject res=jsonArray.getJSONObject(i);
                                     Bundle args=new Bundle();
                                     args.putString("city",res.getString("name")+
@@ -131,7 +132,6 @@ public class OtherCities extends AppCompatActivity {
         String[] cities;
         cities= MyCities.toArray(new String[0]);
         StringBuilder urlResult=new StringBuilder();
-        Log.i("Manama", String.valueOf(urlResult));
         urlResult.append("http://api.openweathermap.org/data/2.5/group?id=");
         for (int i = 0; i < cities.length; i++) {
             urlResult.append(cities[i]);
