@@ -41,21 +41,22 @@ public class GettingData{
     private String city;
     private String detail;
 
+    Double lat=0.0;
+    Double lon=0.0;
+
     public static final String key="b34d97936eaadfa405d3b9b18db6a0ff";
-    public static String URL="https://api.openweathermap.org/data/2.5/weather?q=%s&appid="+key;
+    public static String URL="https://api.openweathermap.org/data/2.5/weather?lat=%1$s&lon=%2$s&appid="+key;
 
 
-    public GettingData(Context context){
+    public GettingData(Context context,Double lon,Double lat){
         this.context=context;
-        city= String.valueOf(MainActivity.city.getText());
+        this.lon=lon;
+        this.lat=lat;
         RequestData(URL);
-    }
-    public GettingData(Context context,String id){
-        RequestData("https://api.openweathermap.org/data/2.5/weather?id="+id+"&appid=b34d97936eaadfa405d3b9b18db6a0ff");
     }
 
     public void RequestData(String uri) {
-        uri =String.format(Locale.getDefault(),uri,getCity());
+        uri=GetUrl(uri);
         JsonObjectRequest request=new JsonObjectRequest(Request.Method.GET,
                 uri, null, new Response.Listener<JSONObject>() {
             @Override
@@ -83,6 +84,13 @@ public class GettingData{
         RequestQueue requestQueue= Volley.newRequestQueue(context);
         requestQueue.add(request);
     }
+
+    private String GetUrl(String uri) {
+        uri=String.format(uri,lat,lon);
+        Log.i("sakdfjlsadkf",uri);
+        return uri;
+    }
+
     private void CityNotFound(VolleyError error){
             WeatherView.city.setText("city not found");
     }

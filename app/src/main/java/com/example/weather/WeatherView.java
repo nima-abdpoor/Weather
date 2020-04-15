@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -16,14 +17,21 @@ public class WeatherView extends AppCompatActivity {
     static ImageView stateicon;
     static CardView cardView;
 
+    Double lon= 0.0 ;
+    Double lat= 0.0;
 
     public WeatherView() {
+
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather_view);
+        Intent intent=getIntent();
+        Bundle bundle=intent.getExtras();
+        lat= (Double) bundle.get("lat");
+        lon= (Double) bundle.get("lon");
         VerifyingViewItems();
         setViewItems();
     }
@@ -37,7 +45,7 @@ public class WeatherView extends AppCompatActivity {
     }
 
     private void setViewItems() {
-        new GettingData(this);
+        new GettingData(this,lon,lat);
     }
 
     @Override

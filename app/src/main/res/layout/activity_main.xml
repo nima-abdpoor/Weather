@@ -5,25 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-<EditText
-    android:layout_width="200dp"
-    android:layout_height="wrap_content"
-    android:id="@+id/getcity"
-    android:gravity="center"
-    android:layout_centerHorizontal="true"
-    android:layout_marginTop="20dp"
-    android:hint="CITY"
-    />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/getcity"
-        android:layout_marginTop="40dp"
-        android:id="@+id/button"
-        android:text="button"
-        />
-
 
 
 </RelativeLayout>
