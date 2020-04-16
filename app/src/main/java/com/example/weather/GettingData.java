@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.text.Html;
 import android.util.Log;
+import android.view.View;
 
 import androidx.fragment.app.Fragment;
 
@@ -98,6 +99,7 @@ public class GettingData{
 
 
     public void SetView(){
+        WeatherView.progressBar.setVisibility(View.INVISIBLE);
         WeatherView.city.setText(getCity());
         WeatherView.temp.setText(getTempAverage(DEFAULT_TEMP));
         WeatherView.detail.setText(getDetail());

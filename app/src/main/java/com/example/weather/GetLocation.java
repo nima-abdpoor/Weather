@@ -124,6 +124,7 @@ public class GetLocation extends Service implements LocationListener {
                         Intent intent = new Intent();
                         intent.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                         context.startActivity(intent);
+                        DialogState=true;
 
                     }
                 })

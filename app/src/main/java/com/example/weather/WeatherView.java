@@ -9,13 +9,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class WeatherView extends AppCompatActivity {
     static TextView temp,city,detail;
     static ImageView stateicon;
     static CardView cardView;
+    static ProgressBar progressBar;
 
     Double lon= 0.0 ;
     Double lat= 0.0;
@@ -27,13 +30,19 @@ public class WeatherView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_weather_view);
-        Intent intent=getIntent();
-        Bundle bundle=intent.getExtras();
-        lat= (Double) bundle.get("lat");
-        lon= (Double) bundle.get("lon");
+        GetingLocation();
         VerifyingViewItems();
         setViewItems();
+    }
+
+    private void GetingLocation() {
+        setContentView(R.layout.activity_weather_view);
+        GetLocation getLocation=new GetLocation(this);
+        lat=getLocation.getLatitude();
+        lon=getLocation.getLongitude();
+        if (lon == 0.0 && lat ==0.0){
+            GetingLocation();
+        }
     }
 
     public void VerifyingViewItems() {
@@ -42,9 +51,11 @@ public class WeatherView extends AppCompatActivity {
         temp =findViewById(R.id.temp);
         cardView =findViewById(R.id.card_view);
         detail =findViewById(R.id.detail);
+        progressBar=findViewById(R.id.progress_bar);
     }
 
     private void setViewItems() {
+        progressBar.setVisibility(View.VISIBLE);
         new GettingData(this,lon,lat);
     }
 
