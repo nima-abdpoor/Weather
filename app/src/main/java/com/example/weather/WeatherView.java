@@ -3,13 +3,14 @@ package com.example.weather;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ public class WeatherView extends AppCompatActivity {
     static ImageView stateicon;
     static CardView cardView;
     static ProgressBar progressBar;
+    ImageButton home,search,other;
 
     Double lon= 0.0 ;
     Double lat= 0.0;
@@ -30,19 +32,47 @@ public class WeatherView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        GetingLocation();
+        GettingLocation();
         VerifyingViewItems();
+        setonclickforicons();
         setViewItems();
     }
 
-    private void GetingLocation() {
+    private void setonclickforicons() {
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refreshPage();
+            }
+        });
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(WeatherView.this,Activity_cities.class);
+                startActivity(intent);
+            }
+        });
+        other.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(WeatherView.this,OtherCities.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void GettingLocation() {
         setContentView(R.layout.activity_weather_view);
         GetLocation getLocation=new GetLocation(this);
         lat=getLocation.getLatitude();
         lon=getLocation.getLongitude();
         if (lon == 0.0 && lat ==0.0){
-            GetingLocation();
+            GettingLocation();
         }
+    }
+
+    private void refreshPage() {
+        setViewItems();
     }
 
     public void VerifyingViewItems() {
@@ -52,40 +82,20 @@ public class WeatherView extends AppCompatActivity {
         cardView =findViewById(R.id.card_view);
         detail =findViewById(R.id.detail);
         progressBar=findViewById(R.id.progress_bar);
+        home=findViewById(R.id.home);
+        search=findViewById(R.id.search);
+        other=findViewById(R.id.other);
     }
-
     private void setViewItems() {
+        home.setBackgroundResource(R.drawable.homeblue);
+        search.setBackgroundResource(R.drawable.search);
+        other.setBackgroundResource(R.drawable.language);
         progressBar.setVisibility(View.VISIBLE);
         new GettingData(this,lon,lat);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add("Locations").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                Log.i("salamgoh","");
-                Intent intent=new Intent(WeatherView.this,SearchCity.class);
-                startActivity(intent);
-                return false;
-            }
-        });
-        menu.add("My Cities").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                Intent intent=new Intent(WeatherView.this,Activity_cities.class);
-                startActivity(intent);
-                return false;
-            }
-        });
-        menu.add("All Cities").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                Intent intent=new Intent(WeatherView.this,OtherCities.class);
-                startActivity(intent);
-                return false;
-            }
-        });
-        return super.onCreateOptionsMenu(menu);
+    public void onBackPressed() {
+        finishAffinity();
     }
 }

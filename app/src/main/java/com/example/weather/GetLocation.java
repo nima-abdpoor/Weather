@@ -17,7 +17,6 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.DialogFragment;
 
 public class GetLocation extends Service implements LocationListener {
 

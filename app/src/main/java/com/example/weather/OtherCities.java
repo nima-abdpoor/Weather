@@ -11,11 +11,13 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.app.DownloadManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -48,11 +50,15 @@ public class OtherCities extends AppCompatActivity {
     MyPagerAdapter adapter;
     RequestQueue requestQueue;
     JsonObjectRequest request;
+    ImageButton home,search,other;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_other_cities);
         VeryfingViewItems();
+        setonclickforicons();
         progressBar.setVisibility(View.VISIBLE);
         Init();
     }
@@ -60,6 +66,15 @@ public class OtherCities extends AppCompatActivity {
     private void VeryfingViewItems() {
         progressBar=findViewById(R.id.progress_bar);
         viewPager=findViewById(R.id.view_pager);
+        home=findViewById(R.id.home);
+        search=findViewById(R.id.search);
+        other=findViewById(R.id.other);
+        setViewItems();
+    }
+    private void setViewItems() {
+        home.setBackgroundResource(R.drawable.hime);
+        search.setBackgroundResource(R.drawable.search);
+        other.setBackgroundResource(R.drawable.globeblue);
     }
 
     private void Init() {
@@ -95,7 +110,6 @@ public class OtherCities extends AppCompatActivity {
                                 progressBar.setVisibility(View.INVISIBLE);
                                 int cnt=response.getInt("cnt");
                                 JSONArray jsonArray=response.getJSONArray("list");
-                                Log.i("fragmaentsize", String.valueOf(jsonArray.length()));
                                 for (int i=0;i<cnt;++i){
                                     JSONObject res=jsonArray.getJSONObject(i);
                                     Bundle args=new Bundle();
@@ -142,7 +156,37 @@ public class OtherCities extends AppCompatActivity {
         urlResult.append("&APPID="+key);
         return String.valueOf(urlResult);
     }
+    private void setonclickforicons() {
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(OtherCities.this,WeatherView.class);
+                startActivity(intent);
+            }
+        });
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(OtherCities.this,Activity_cities.class);
+                startActivity(intent);
+            }
+        });
+        other.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refreshPage();
+            }
+        });
+    }
+    private void refreshPage() {
+        Init();
+    }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent=new Intent(OtherCities.this,WeatherView.class);
+        startActivity(intent);
+    }
 }
 
     class MyPagerAdapter extends FragmentPagerAdapter {
@@ -151,7 +195,6 @@ public class OtherCities extends AppCompatActivity {
         super(fm);
         this.fragments=frag;
     }
-
     @Override
     public Fragment getItem(int position) {
         return fragments.get(position);

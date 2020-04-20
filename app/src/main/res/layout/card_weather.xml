@@ -1,68 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    android:id="@+id/card_view"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:elevation="10dp"
-    android:layout_margin="16dp"
-    app:cardCornerRadius="8dp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <RelativeLayout
-        android:layout_margin="20dp"
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="200dp">
-
-        <TextView
-            android:id="@+id/city"
-            android:layout_margin="16dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:textSize="16sp"
-            android:textStyle="italic"
-            />
-
-        <ImageView
-            android:id="@+id/icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/city"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="20dp"
-            />
-
-        <TextView
-            android:id="@+id/temp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="26sp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            />
-        <TextView
-            android:id="@+id/test"
-            android:text=""
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:elevation="10dp"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="8dp"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+        <RelativeLayout
             android:layout_margin="20dp"
-            />
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
 
-        <TextView
-            android:id="@+id/detail"
-            android:layout_alignParentBottom="true"
-            android:textSize="16sp"
-            android:layout_centerHorizontal="true"
-            android:layout_margin="10dp"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            />
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/city"
+                android:layout_margin="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:textSize="16sp"
+                android:textStyle="italic"
+                />
 
-</androidx.cardview.widget.CardView>
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/city"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="20dp"
+                />
+
+            <TextView
+                android:id="@+id/temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="26sp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                />
+            <TextView
+                android:id="@+id/test"
+                android:text=""
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="20dp"
+                />
+
+            <TextView
+                android:id="@+id/detail"
+                android:layout_alignParentBottom="true"
+                android:textSize="16sp"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="10dp"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
 
 
 

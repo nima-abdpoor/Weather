@@ -18,7 +18,6 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Locale;
 
 import static com.example.weather.MainActivity.DEFAULT_TEMP;
 
@@ -68,9 +67,7 @@ public class GettingData{
                     setIcon(response.getJSONArray("weather").getJSONObject(0).getString("icon"));
                     setDetail(response.getJSONArray("weather").getJSONObject(0).getString("description"));
                     SetView();
-                    Log.i("salam",getCity());
                 } catch (JSONException e) {
-                    Log.i("solam",e.getMessage());
                     e.printStackTrace();
                 }
             }
@@ -88,12 +85,12 @@ public class GettingData{
 
     private String GetUrl(String uri) {
         uri=String.format(uri,lat,lon);
-        Log.i("sakdfjlsadkf",uri);
         return uri;
     }
 
     private void CityNotFound(VolleyError error){
-            WeatherView.city.setText("city not found");
+        WeatherView.progressBar.setVisibility(View.INVISIBLE);
+        WeatherView.city.setText("city not found");
     }
 
 
