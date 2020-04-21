@@ -128,8 +128,10 @@ public class OtherCities extends AppCompatActivity {
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    if (fragments.size() == 0){
+                        Toast.makeText(OtherCities.this,"Please Add City",Toast.LENGTH_SHORT).show();
+                    }
                     progressBar.setVisibility(View.INVISIBLE);
-                    Log.i("solam",error.getMessage());
                 }
             });
             requestQueue.add(request);
@@ -167,7 +169,7 @@ public class OtherCities extends AppCompatActivity {
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(OtherCities.this,Activity_cities.class);
+                Intent intent=new Intent(OtherCities.this,SearchCity.class);
                 startActivity(intent);
             }
         });

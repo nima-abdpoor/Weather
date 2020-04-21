@@ -3,12 +3,8 @@ package com.example.weather;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -48,7 +44,7 @@ public class WeatherView extends AppCompatActivity {
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(WeatherView.this,Activity_cities.class);
+                Intent intent=new Intent(WeatherView.this,SearchCity.class);
                 startActivity(intent);
             }
         });

@@ -1,18 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout 
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SearchCity">
 
-    
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/search_button"
+        android:padding="10dp"
+        android:layout_margin="10dp"
+        android:text=" + Click to add location"
+        android:textSize="16sp"
+        android:textAllCaps="false"
+        android:gravity="left"
+        android:visibility="gone"
+        />
     <ListView
+        android:layout_below="@+id/search_button"
         android:padding="20dp"
         android:id="@+id/search_city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contextClickable="true"
         android:layout_weight="1"/>
+
     
-</LinearLayout>
+</RelativeLayout>
