@@ -15,11 +15,6 @@ import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import data.CityDbHelper;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         checkPermissions();
-        getLocation();
     }
 
     public void getLocation(){
@@ -51,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     100);
         }
-
+        else getLocation();
     }
 
     @Override
@@ -60,10 +54,12 @@ public class MainActivity extends AppCompatActivity {
             Log.i("testrequest","true");
             if(grantResults[0]==PackageManager.PERMISSION_GRANTED)
             {
+                getLocation();
                 Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
             }
             else {
                 Toast.makeText(this,"Permission Denied To Access Location",Toast.LENGTH_SHORT).show();
+                finishAffinity();
             }
         }
     }

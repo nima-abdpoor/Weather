@@ -59,6 +59,11 @@ public class CityDbHelper extends SQLiteOpenHelper {
         db.execSQL(CMD_CREATE_TABLE);
         db.execSQL(CMD_CREATE_MY_CITIES);
         db.execSQL(CMD_CREATE_CURRENT_CITY);
+        ContentValues contentValues=new ContentValues();
+        contentValues.put("ID",1);
+        contentValues.put("LATITUDE",0.0);
+        contentValues.put("LONGITUDE",0.0);
+        db.insert(MY_CITY,null,contentValues);
     }
 
     @Override
@@ -71,10 +76,9 @@ public class CityDbHelper extends SQLiteOpenHelper {
     public void SetCurrentCity(double lat,double lon){
         SQLiteDatabase db=getWritableDatabase();
         ContentValues contentValues=new ContentValues();
-        contentValues.put("ID",1);
         contentValues.put("LATITUDE",lat);
         contentValues.put("LONGITUDE",lon);
-        db.insert(MY_CITY,null,contentValues);
+        db.update(MY_CITY,contentValues,"ID = 1",null);
         db.close();
     }
     public boolean cangetcurrentcity() {

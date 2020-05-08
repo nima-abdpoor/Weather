@@ -24,13 +24,13 @@ public class WeatherView extends AppCompatActivity {
     Double lat= 0.0;
 
     public WeatherView() {
-
     }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_weather_view);
         VerifyingViewItems();
         setViewItems();
         setonclickforicons();

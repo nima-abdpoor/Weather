@@ -30,7 +30,11 @@ public class ManageCurrentLocation {
 
     private List<Double> getfromdatabase() {
         CityDbHelper cityDbHelper=new CityDbHelper(context);
-        return cityDbHelper.GetCurrentCity();
+        coordinates =cityDbHelper.GetCurrentCity();
+        if (coordinates.get(0)==0.0 || coordinates.get(1)==0.0){
+            coordinates= getfromgps();
+        }
+        return coordinates;
     }
 
     private List<Double> getfromgps() {
@@ -38,6 +42,10 @@ public class ManageCurrentLocation {
         GetLocation getLocation=new GetLocation(context);
         lat=getLocation.getLatitude();
         lon=getLocation.getLongitude();
+        if(lon == 0.0 || lat== 0.0){
+            lat=getLocation.getLatitude();
+            lon=getLocation.getLongitude();
+        }
         cityDbHelper.SetCurrentCity(lat,lon);
         coordinates.add(lat);
         coordinates.add(lon);

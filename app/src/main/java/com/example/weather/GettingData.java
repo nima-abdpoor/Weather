@@ -2,6 +2,7 @@ package com.example.weather;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.location.LocationManager;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -89,8 +90,19 @@ public class GettingData{
     }
 
     private void CityNotFound(VolleyError error){
-        WeatherView.progressBar.setVisibility(View.INVISIBLE);
-        WeatherView.city.setText("city not found");
+        boolean Network;
+        LocationManager locationManager;
+        locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        Network=locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        if (!Network){
+            WeatherView.progressBar.setVisibility(View.INVISIBLE);
+            WeatherView.city.setText("NO INTERNET");
+        }
+        else {
+            WeatherView.city.setText("City Not Found");
+            WeatherView.progressBar.setVisibility(View.INVISIBLE);
+        }
+
     }
 
 
