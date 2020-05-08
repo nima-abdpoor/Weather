@@ -3,6 +3,7 @@ package data;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -23,10 +24,12 @@ public class CityDbHelper extends SQLiteOpenHelper {
     Context context;
     private static final String [] ALL_COLUMNS_CITY ={"ID","NAME","LAT","LON","COUNTRY"};
     private static final String [] ALL_COLUMNS_MY_CITIES ={"ID","NAME","SELECTED"};
+    private static final String [] ALL_COLUMNS_CURRENT_CITY ={"LATITUDE","LONGITUDE"};
     public static final int DB_VERSION = 1;
+    public static final String DB_NAME="DB_CITY";
     public static final String TABLE_NAME ="TABLE_CITY";
     public static final String MY_CITIES_TABLE ="MY_CITIES";
-    public static final String DB_NAME="DB_CITY";
+    public static final String MY_CITY ="MY_CITY";
     private final String CMD_CREATE_TABLE="CREATE TABLE IF NOT EXISTS "+ TABLE_NAME + "("+
             "'ID' INTEGER PRIMARY KEY NOT NULL, " +
             "'NAME' TEXT , " +
@@ -40,6 +43,12 @@ public class CityDbHelper extends SQLiteOpenHelper {
             "'SELECTED' INTEGER "+
             " )";
 
+    private final String CMD_CREATE_CURRENT_CITY="CREATE TABLE IF NOT EXISTS "+ MY_CITY + "("+
+            "'ID' INTEGER PRIMARY KEY NOT NULL, "+
+            "'LATITUDE' DOUBLE, "+
+            "'LONGITUDE' DOUBLE "+
+            " )";
+
     public CityDbHelper( Context context) {
         super(context, DB_NAME, null, DB_VERSION);
         this.context=context;
@@ -49,13 +58,57 @@ public class CityDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CMD_CREATE_TABLE);
         db.execSQL(CMD_CREATE_MY_CITIES);
+        db.execSQL(CMD_CREATE_CURRENT_CITY);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS "+ TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS "+MY_CITIES_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS "+MY_CITY);
         onCreate(db);
+    }
+    public void SetCurrentCity(double lat,double lon){
+        SQLiteDatabase db=getWritableDatabase();
+        ContentValues contentValues=new ContentValues();
+        contentValues.put("ID",1);
+        contentValues.put("LATITUDE",lat);
+        contentValues.put("LONGITUDE",lon);
+        db.insert(MY_CITY,null,contentValues);
+        db.close();
+    }
+    public boolean cangetcurrentcity() {
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        Cursor cursor;
+        try {
+             cursor = sqLiteDatabase.query(true, MY_CITY, ALL_COLUMNS_CURRENT_CITY,
+                    "ID = 1", null, null, null, null, null);
+        }
+        catch (SQLException ex){
+            return false;
+        }
+        if (cursor.getCount() == 0){
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    public List<Double> GetCurrentCity(){
+        List<Double> Coordinates=new ArrayList<>();
+        SQLiteDatabase sqLiteDatabase=getReadableDatabase();
+        Cursor cursor=sqLiteDatabase.query(true,MY_CITY,ALL_COLUMNS_CURRENT_CITY,
+                "ID = 1",null,null,null,null,null);
+            if(cursor.moveToFirst()){
+                Coordinates.add(cursor.getDouble(cursor.getColumnIndex("LATITUDE")));
+                Coordinates.add(cursor.getDouble(cursor.getColumnIndex("LONGITUDE")));
+            }
+            for (Double list:Coordinates){
+                Log.i("narinim", String.valueOf(list));
+            }
+
+        return Coordinates;
+
     }
     public void InitContents(){
         Thread thread=new Thread(new Runnable() {

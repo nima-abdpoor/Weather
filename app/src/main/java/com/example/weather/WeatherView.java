@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.List;
+
 public class WeatherView extends AppCompatActivity {
     static TextView temp,city,detail;
     static ImageView stateicon;
@@ -25,13 +27,14 @@ public class WeatherView extends AppCompatActivity {
 
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        GettingLocation();
         VerifyingViewItems();
-        setonclickforicons();
         setViewItems();
+        setonclickforicons();
+        GettingLocation();
     }
 
     private void setonclickforicons() {
@@ -58,13 +61,11 @@ public class WeatherView extends AppCompatActivity {
     }
 
     private void GettingLocation() {
-        setContentView(R.layout.activity_weather_view);
-        GetLocation getLocation=new GetLocation(this);
-        lat=getLocation.getLatitude();
-        lon=getLocation.getLongitude();
-        if (lon == 0.0 && lat ==0.0){
-            GettingLocation();
-        }
+        List<Double> list;
+        ManageCurrentLocation currentLocation=new ManageCurrentLocation(this);
+        list=currentLocation.getcoordinates();
+        lat=list.get(0);
+        lon=list.get(1);
     }
 
     private void refreshPage() {

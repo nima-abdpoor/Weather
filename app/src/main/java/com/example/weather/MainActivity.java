@@ -15,10 +15,13 @@ import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import data.CityDbHelper;
 
 
 public class MainActivity extends AppCompatActivity {
-
 
     public static String  [] TEMP_TYPE = new String[]{"Kelvin","Celsius","Fahrenheit"};
     public static String DEFAULT_TEMP=TEMP_TYPE[1];
@@ -33,18 +36,12 @@ public class MainActivity extends AppCompatActivity {
     public void getLocation(){
         GetLocation GetLocation = new GetLocation(this);
         if(!GetLocation.canGetLocation()){
-           showGpsAlertDialog();
+            showGpsAlertDialog();
         } else {
             Intent weatherView=new Intent(MainActivity.this,WeatherView.class);
             startActivity(weatherView);
             finish();
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        getLocation();
     }
 
     private void checkPermissions() {
@@ -87,12 +84,12 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
                         dialog.cancel();
-                        Intent intent = new Intent(MainActivity.this,OtherCities.class);
+                        Intent intent=new Intent(MainActivity.this,WeatherView.class);
                         startActivity(intent);
-
                     }
                 });
         builder.show();
     }
+
 
 }
