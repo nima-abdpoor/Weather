@@ -24,8 +24,8 @@ public class CityDbHelper extends SQLiteOpenHelper {
     Context context;
     private static final String [] ALL_COLUMNS_CITY ={"ID","NAME","LAT","LON","COUNTRY"};
     private static final String [] ALL_COLUMNS_MY_CITIES ={"ID","NAME","SELECTED"};
-    private static final String [] ALL_COLUMNS_CURRENT_CITY ={"LATITUDE","LONGITUDE"};
-    public static final int DB_VERSION = 1;
+    private static final String [] ALL_COLUMNS_CURRENT_CITY ={"ID","LATITUDE","LONGITUDE"};
+    public static final int DB_VERSION =1;
     public static final String DB_NAME="DB_CITY";
     public static final String TABLE_NAME ="TABLE_CITY";
     public static final String MY_CITIES_TABLE ="MY_CITIES";
@@ -44,7 +44,7 @@ public class CityDbHelper extends SQLiteOpenHelper {
             " )";
 
     private final String CMD_CREATE_CURRENT_CITY="CREATE TABLE IF NOT EXISTS "+ MY_CITY + "("+
-            "'ID' INTEGER PRIMARY KEY NOT NULL, "+
+            "'ID' INTEGER, "+
             "'LATITUDE' DOUBLE, "+
             "'LONGITUDE' DOUBLE "+
             " )";
@@ -59,11 +59,6 @@ public class CityDbHelper extends SQLiteOpenHelper {
         db.execSQL(CMD_CREATE_TABLE);
         db.execSQL(CMD_CREATE_MY_CITIES);
         db.execSQL(CMD_CREATE_CURRENT_CITY);
-        ContentValues contentValues=new ContentValues();
-        contentValues.put("ID",1);
-        contentValues.put("LATITUDE",0.0);
-        contentValues.put("LONGITUDE",0.0);
-        db.insert(MY_CITY,null,contentValues);
     }
 
     @Override
@@ -73,9 +68,20 @@ public class CityDbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS "+MY_CITY);
         onCreate(db);
     }
+    public void CreateCurrentCityTable(){
+        SQLiteDatabase sqLiteDatabase=getWritableDatabase();
+        ContentValues contentValues=new ContentValues();
+        contentValues.put("ID",1);
+        contentValues.put("LATITUDE",0.0);
+        contentValues.put("LONGITUDE",0.0);
+        Long salam =sqLiteDatabase.insert(MY_CITY,null,contentValues);
+        Log.i("fsajflsk", String.valueOf(salam));
+        sqLiteDatabase.close();
+    }
     public void SetCurrentCity(double lat,double lon){
         SQLiteDatabase db=getWritableDatabase();
         ContentValues contentValues=new ContentValues();
+        contentValues.put("ID",1);
         contentValues.put("LATITUDE",lat);
         contentValues.put("LONGITUDE",lon);
         db.update(MY_CITY,contentValues,"ID = 1",null);

@@ -3,6 +3,8 @@ package com.example.weather;
 import android.content.ContentValues;
 import android.content.Context;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -20,20 +22,26 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+
+import static android.content.Context.*;
+import static androidx.core.content.ContextCompat.getSystemService;
 import static com.example.weather.MainActivity.DEFAULT_TEMP;
 
-public class GettingData{
+public class GettingData {
     Context context;
 
-    private double longitude ;
+    private double longitude;
     private double latitude;
     private int weatherId;
-    private String icon="";
-    private int tempAverage ;
-    private double tempMin ;
-    private double tempMax ;
-    private int pressure ;
-    private int humidity ;
+    private String icon = "";
+    private int tempAverage;
+    private double tempMin;
+    private double tempMax;
+    private int pressure;
+    private int humidity;
     private double speed;
     private double rain1h;
     private double snow1h;
@@ -42,28 +50,30 @@ public class GettingData{
     private String city;
     private String detail;
 
-    Double lat=0.0;
-    Double lon=0.0;
+    Double lat = 0.0;
+    Double lon = 0.0;
 
-    public static final String key="b34d97936eaadfa405d3b9b18db6a0ff";
-    public static String URL="https://api.openweathermap.org/data/2.5/weather?lat=%1$s&lon=%2$s&appid="+key;
+    public static final String key = "b34d97936eaadfa405d3b9b18db6a0ff";
+    public static String URL = "https://api.openweathermap.org/data/2.5/weather?lat=%1$s&lon=%2$s&appid=" + key;
 
 
-    public GettingData(Context context,Double lon,Double lat){
-        this.context=context;
-        this.lon=lon;
-        this.lat=lat;
+    public GettingData(Context context, Double lon, Double lat) {
+        this.context = context;
+        this.lon = lon;
+        this.lat = lat;
         RequestData(URL);
+        Log.i("adfkjklas", String.valueOf(lat));
+        Log.i("adfkjklas", String.valueOf(lon));
     }
 
     public void RequestData(String uri) {
-        uri=GetUrl(uri);
-        JsonObjectRequest request=new JsonObjectRequest(Request.Method.GET,
+        uri = GetUrl(uri);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,
                 uri, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    setCity(response.getString("name")+", "+response.getJSONObject("sys").getString("country"));
+                    setCity(response.getString("name") + ", " + response.getJSONObject("sys").getString("country"));
                     setTempAverage(response.getJSONObject("main").getInt("temp"));
                     setIcon(response.getJSONArray("weather").getJSONObject(0).getString("icon"));
                     setDetail(response.getJSONArray("weather").getJSONObject(0).getString("description"));
@@ -80,34 +90,39 @@ public class GettingData{
             }
         }
         );
-        RequestQueue requestQueue= Volley.newRequestQueue(context);
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(request);
     }
 
     private String GetUrl(String uri) {
-        uri=String.format(uri,lat,lon);
+        uri = String.format(uri, lat, lon);
         return uri;
     }
 
-    private void CityNotFound(VolleyError error){
-        boolean Network;
-        LocationManager locationManager;
-        locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        Network=locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        if (!Network){
-            WeatherView.progressBar.setVisibility(View.INVISIBLE);
+    private void CityNotFound(VolleyError error) {
+        if(hostAvailable("www.google.com",80)){
             WeatherView.city.setText("NO INTERNET");
+            WeatherView.progressBar.setVisibility(View.INVISIBLE);
         }
         else {
             WeatherView.city.setText("City Not Found");
             WeatherView.progressBar.setVisibility(View.INVISIBLE);
         }
+    }
 
+    public boolean hostAvailable(String host, int port) {
+        try (Socket socket = new Socket()) {
+            socket.connect(new InetSocketAddress(host, port), 2000);
+            return true;
+        } catch (IOException e) {
+            // Either we have a timeout or unreachable host or failed DNS lookup
+            System.out.println(e);
+            return false;
+        }
     }
 
 
-
-    public void SetView(){
+    public void SetView() {
         WeatherView.progressBar.setVisibility(View.INVISIBLE);
         WeatherView.city.setText(getCity());
         WeatherView.temp.setText(getTempAverage(DEFAULT_TEMP));
@@ -192,8 +207,8 @@ public class GettingData{
     }
 
     public String getIcon() {
-         if(icon.contains("01")|| icon.contains("02")||icon.contains("10")){
-            switch (icon){
+        if (icon.contains("01") || icon.contains("02") || icon.contains("10")) {
+            switch (icon) {
                 case "01d":
                     WeatherView.stateicon.setImageResource(R.drawable.clearskyd);
                     break;
@@ -213,10 +228,9 @@ public class GettingData{
                     WeatherView.stateicon.setImageResource(R.drawable.rainn);
                     break;
             }
-        }
-        else {
-            icon=icon.substring(0,2);
-            switch (icon){
+        } else {
+            icon = icon.substring(0, 2);
+            switch (icon) {
                 case "03":
                     WeatherView.stateicon.setImageResource(R.drawable.scatterdcloudsd);
                     break;
@@ -242,14 +256,15 @@ public class GettingData{
     }
 
     public String getTempAverage(String type) {
-        switch (type){
-            case  "Kelvin":
+        switch (type) {
+            case "Kelvin":
                 return (String.valueOf(tempAverage));
             case "Celsius":
-                return (String.valueOf((tempAverage-273))+ Html.fromHtml("&#8451;"));
+                return (String.valueOf((tempAverage - 273)) + Html.fromHtml("&#8451;"));
             case "Fahrenheit":
-                return String.valueOf((((tempAverage-273)*1.8)+32));
-            default:break;
+                return String.valueOf((((tempAverage - 273) * 1.8) + 32));
+            default:
+                break;
         }
         return String.valueOf(tempAverage);
     }
@@ -291,14 +306,16 @@ public class GettingData{
     }
 
     public String getCity() {
-        switch (city){
+        switch (city) {
             case "Tehran":
-               // WeatherView.cardView.setBackgroundResource(R.drawable.damavand);
+                // WeatherView.cardView.setBackgroundResource(R.drawable.damavand);
                 break;
-            default:break;
+            default:
+                break;
         }
         return city;
     }
+
     public String getDetail() {
         return detail;
     }

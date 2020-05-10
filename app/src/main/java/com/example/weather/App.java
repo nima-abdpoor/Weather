@@ -31,8 +31,10 @@ public class App extends Application {
             public void run() {
                CityDbHelper dbHelper =new CityDbHelper(getApplicationContext());
                dbHelper.DeleteUnUsedInfo();
+               //dbHelper.CreateCurrentCityTable();
             }
         });
+        DeleteUnUsedInfo.start();
         super.onCreate();
     }
 }

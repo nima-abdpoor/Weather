@@ -3,8 +3,13 @@ package com.example.weather;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -32,9 +37,9 @@ public class WeatherView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather_view);
         VerifyingViewItems();
+        getLocation();
         setViewItems();
         setonclickforicons();
-        GettingLocation();
     }
 
     private void setonclickforicons() {
@@ -66,6 +71,8 @@ public class WeatherView extends AppCompatActivity {
         list=currentLocation.getcoordinates();
         lat=list.get(0);
         lon=list.get(1);
+        Log.i("asfjsldkf", String.valueOf(lat));
+        Log.i("asfjsldkf", String.valueOf(lon));
     }
 
     private void refreshPage() {
@@ -94,5 +101,39 @@ public class WeatherView extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         finishAffinity();
+    }
+
+    public void showGpsAlertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("GPS")
+                .setMessage("GPS is not enabled. Do you want to go to Settings menu?")
+                .setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        Intent intent = new Intent();
+                        intent.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivity(intent);
+                        finish();
+
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        dialog.cancel();
+                        Intent intent=new Intent(WeatherView.this,OtherCities.class);
+                        startActivity(intent);
+                    }
+                });
+        builder.show();
+    }
+
+    public void getLocation(){
+        GetLocation GetLocation = new GetLocation(this);
+        if(!GetLocation.canGetLocation()){
+            showGpsAlertDialog();
+        } else {
+            GettingLocation();
+        }
     }
 }

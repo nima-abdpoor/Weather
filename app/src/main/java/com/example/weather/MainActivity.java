@@ -27,15 +27,10 @@ public class MainActivity extends AppCompatActivity {
         checkPermissions();
     }
 
-    public void getLocation(){
-        GetLocation GetLocation = new GetLocation(this);
-        if(!GetLocation.canGetLocation()){
-            showGpsAlertDialog();
-        } else {
-            Intent weatherView=new Intent(MainActivity.this,WeatherView.class);
-            startActivity(weatherView);
-            finish();
-        }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkPermissions();
     }
 
     private void checkPermissions() {
@@ -45,8 +40,12 @@ public class MainActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     100);
         }
-        else getLocation();
+        else {
+            Intent intent = new Intent(MainActivity.this, WeatherView.class);
+            startActivity(intent);
+        }
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -54,7 +53,8 @@ public class MainActivity extends AppCompatActivity {
             Log.i("testrequest","true");
             if(grantResults[0]==PackageManager.PERMISSION_GRANTED)
             {
-                getLocation();
+                Intent intent=new Intent(MainActivity.this,WeatherView.class);
+                startActivity(intent);
                 Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
             }
             else {
@@ -62,29 +62,6 @@ public class MainActivity extends AppCompatActivity {
                 finishAffinity();
             }
         }
-    }
-    public void showGpsAlertDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("GPS")
-                .setMessage("GPS is not enabled. Do you want to go to Settings menu?")
-                .setPositiveButton("Settings", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int i) {
-                        Intent intent = new Intent();
-                        intent.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        startActivity(intent);
-
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int i) {
-                        dialog.cancel();
-                        Intent intent=new Intent(MainActivity.this,WeatherView.class);
-                        startActivity(intent);
-                    }
-                });
-        builder.show();
     }
 
 
