@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -24,6 +23,7 @@ public class WeatherView extends AppCompatActivity {
     static CardView cardView;
     static ProgressBar progressBar;
     ImageButton home,search,other;
+    GetLocation GetLocation;
 
     Double lon= 0.0 ;
     Double lat= 0.0;
@@ -37,7 +37,6 @@ public class WeatherView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather_view);
         VerifyingViewItems();
-        getLocation();
         setViewItems();
         setonclickforicons();
     }
@@ -71,8 +70,7 @@ public class WeatherView extends AppCompatActivity {
         list=currentLocation.getcoordinates();
         lat=list.get(0);
         lon=list.get(1);
-        Log.i("asfjsldkf", String.valueOf(lat));
-        Log.i("asfjsldkf", String.valueOf(lon));
+        setViewItems();
     }
 
     private void refreshPage() {
@@ -128,8 +126,20 @@ public class WeatherView extends AppCompatActivity {
         builder.show();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Handler handler=new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getLocation();
+            }
+        },1000);
+    }
+
     public void getLocation(){
-        GetLocation GetLocation = new GetLocation(this);
+        GetLocation =new GetLocation(this);
         if(!GetLocation.canGetLocation()){
             showGpsAlertDialog();
         } else {
