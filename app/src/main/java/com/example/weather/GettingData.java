@@ -1,12 +1,14 @@
 package com.example.weather;
 
+import android.app.Notification;
 import android.content.Context;
 import android.os.NetworkOnMainThreadException;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 
 
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -24,8 +26,10 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 
 import static com.example.weather.MainActivity.DEFAULT_TEMP;
+import static com.example.weather.MainActivity.MyCity;
 
 public class GettingData {
+    NotificationManagerCompat notificationManager;
     Context context;
 
     private double longitude;
@@ -57,8 +61,6 @@ public class GettingData {
         this.lon = lon;
         this.lat = lat;
         RequestData(URL);
-        Log.i("adfkjklas", String.valueOf(lat));
-        Log.i("adfkjklas", String.valueOf(lon));
     }
 
     public void RequestData(String uri) {
@@ -128,6 +130,20 @@ public class GettingData {
         WeatherView.temp.setText(getTempAverage(DEFAULT_TEMP));
         WeatherView.detail.setText(getDetail());
         getIcon();
+        SendNotification();
+    }
+
+    private void SendNotification() {
+        notificationManager= NotificationManagerCompat.from(context);
+        Notification notification=new NotificationCompat.Builder(context,MyCity)
+                .setSmallIcon(getIcon(),10)
+                .setContentTitle(getTempAverage(DEFAULT_TEMP)+" ("+detail+")")
+                .setContentText(city)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .setAutoCancel(true)
+                .build();
+        notificationManager.notify(1,notification);
     }
 
     public void setCity(String city) {
@@ -206,53 +222,52 @@ public class GettingData {
         return weatherId;
     }
 
-    public String getIcon() {
+    public int getIcon() {
         if (icon.contains("01") || icon.contains("02") || icon.contains("10")) {
             switch (icon) {
                 case "01d":
                     WeatherView.stateicon.setImageResource(R.drawable.clearskyd);
-                    break;
+                    return R.drawable.clearskyd;
                 case "01n":
                     WeatherView.stateicon.setImageResource(R.drawable.clearskyn);
-                    break;
+                    return R.drawable.clearskyn;
                 case "02d":
                     WeatherView.stateicon.setImageResource(R.drawable.fewcloudsd);
-                    break;
+                    return R.drawable.clearskyn;
                 case "02n":
                     WeatherView.stateicon.setImageResource(R.drawable.fewcloudsn);
-                    break;
+                    return R.drawable.fewcloudsn;
                 case "10d":
                     WeatherView.stateicon.setImageResource(R.drawable.raind);
-                    break;
+                    return R.drawable.raind;
                 case "10n":
                     WeatherView.stateicon.setImageResource(R.drawable.rainn);
-                    break;
+                    return R.drawable.rainn;
             }
         } else {
             icon = icon.substring(0, 2);
             switch (icon) {
                 case "03":
                     WeatherView.stateicon.setImageResource(R.drawable.scatterdcloudsd);
-                    break;
+                    return R.drawable.scatterdcloudsd;
                 case "04":
                     WeatherView.stateicon.setImageResource(R.drawable.brokencloudsd);
-                    break;
+                    return R.drawable.brokencloudsd;
                 case "09":
                     WeatherView.stateicon.setImageResource(R.drawable.showerraind);
-                    break;
+                    return R.drawable.showerraind;
                 case "11":
                     WeatherView.stateicon.setImageResource(R.drawable.thunderstormd);
-                    break;
+                    return R.drawable.thunderstormd;
                 case "13":
                     WeatherView.stateicon.setImageResource(R.drawable.snow);
-                    break;
+                    return R.drawable.snow;
                 case "50":
                     WeatherView.stateicon.setImageResource(R.drawable.mist);
-                    break;
+                    return R.drawable.mist;
             }
         }
-
-        return icon;
+        return 0;
     }
 
     public String getTempAverage(String type) {

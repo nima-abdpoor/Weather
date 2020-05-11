@@ -1,26 +1,43 @@
 package com.example.weather;
 
 import android.Manifest;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 
 public class MainActivity extends AppCompatActivity {
-
+    public static final String MyCity ="MyCity";
     public static String  [] TEMP_TYPE = new String[]{"Kelvin","Celsius","Fahrenheit"};
     public static String DEFAULT_TEMP=TEMP_TYPE[1];
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        CreateNotificationChannels();
         checkPermissions();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void CreateNotificationChannels() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel mycity =new NotificationChannel(MyCity,MyCity, NotificationManager.IMPORTANCE_HIGH);
+            mycity.setDescription("جونی ننت دستش نزن");
+            NotificationManager manager=getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(mycity);
+        }
     }
 
     @Override
