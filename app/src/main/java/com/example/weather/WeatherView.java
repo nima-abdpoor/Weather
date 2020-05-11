@@ -89,9 +89,6 @@ public class WeatherView extends AppCompatActivity {
         other=findViewById(R.id.other);
     }
     private void setViewItems() {
-        home.setBackgroundResource(R.drawable.homeblue);
-        search.setBackgroundResource(R.drawable.search);
-        other.setBackgroundResource(R.drawable.language);
         progressBar.setVisibility(View.VISIBLE);
         new GettingData(this,lon,lat);
     }

@@ -69,12 +69,6 @@ public class OtherCities extends AppCompatActivity {
         home=findViewById(R.id.home);
         search=findViewById(R.id.search);
         other=findViewById(R.id.other);
-        setViewItems();
-    }
-    private void setViewItems() {
-        home.setBackgroundResource(R.drawable.hime);
-        search.setBackgroundResource(R.drawable.search);
-        other.setBackgroundResource(R.drawable.globeblue);
     }
 
     private void Init() {

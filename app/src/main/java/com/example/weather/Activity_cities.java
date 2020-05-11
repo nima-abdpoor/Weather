@@ -29,7 +29,6 @@ public class Activity_cities extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cities);
         VerifingViewItems();
-        setViewItems();
         setonclickforicons();
         setData();
     }
@@ -77,11 +76,6 @@ public class Activity_cities extends AppCompatActivity {
         home=findViewById(R.id.home);
         search=findViewById(R.id.search);
         other=findViewById(R.id.other);
-    }
-    private void setViewItems() {
-        home.setBackgroundResource(R.drawable.hime);
-        search.setBackgroundResource(R.drawable.searchblue);
-        other.setBackgroundResource(R.drawable.globe);
     }
 
     @Override

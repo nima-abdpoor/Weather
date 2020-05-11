@@ -22,7 +22,6 @@ import java.util.List;
 import data.CityDbHelper;
 import data.CityModel;
 
-import static android.app.PendingIntent.getActivity;
 
 public class SearchCity extends AppCompatActivity {
     ListView citiesList;

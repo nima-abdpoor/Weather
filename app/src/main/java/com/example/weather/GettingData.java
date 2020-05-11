@@ -5,6 +5,7 @@ import android.content.Context;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.NetworkOnMainThreadException;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -114,9 +115,14 @@ public class GettingData {
         try (Socket socket = new Socket()) {
             socket.connect(new InetSocketAddress(host, port), 2000);
             return true;
-        } catch (IOException e) {
-            // Either we have a timeout or unreachable host or failed DNS lookup
-            System.out.println(e);
+        }
+        catch (IOException ex){
+            System.out.println(ex);
+            return false;
+        }
+        catch (NetworkOnMainThreadException e) {
+            WeatherView.city.setText("City Not Found");
+            WeatherView.progressBar.setVisibility(View.INVISIBLE);
             return false;
         }
     }

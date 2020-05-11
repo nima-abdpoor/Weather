@@ -39,35 +39,26 @@
                     android:layout_height="50dp">
                         <ImageButton
                             android:id="@+id/home"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentBottom="true"
-                            android:layout_marginHorizontal="50dp"
                             android:layout_weight="1"
-                            android:layout_gravity="center"
-                            android:layout_marginVertical="15dp"
-                            android:background="@drawable/hime"
-                            android:scaleType="fitCenter" />
+                            android:layout_height="match_parent"
+                            android:layout_width="match_parent"
+                            android:background="@drawable/home"
+                            />
                         <ImageButton
-                            android:layout_marginHorizontal="50dp"
                             android:id="@+id/search"
                             android:layout_weight="1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginVertical="15dp"
-                            android:layout_alignParentBottom="true"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:background="@drawable/search"
                             />
 
                         <ImageButton
                             android:id="@+id/other"
-                            android:layout_width="wrap_content"
-                            android:layout_height="16dp"
-                            android:layout_alignParentBottom="true"
-                            android:layout_marginHorizontal="50dp"
-                            android:layout_marginVertical="15dp"
                             android:layout_weight="1"
-                            android:background="@drawable/language" />
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/more"
+                            />
                 </LinearLayout>
         </RelativeLayout>
 
