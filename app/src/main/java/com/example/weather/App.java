@@ -1,9 +1,7 @@
 package com.example.weather;
 
 import android.app.Application;
-import android.content.ContentValues;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.preference.PreferenceManager;
 
 import data.CityDbHelper;

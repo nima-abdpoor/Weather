@@ -1,16 +1,12 @@
 package com.example.weather;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.location.LocationManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.NetworkOnMainThreadException;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
 
-import androidx.fragment.app.Fragment;
+
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -27,8 +23,6 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
-import static android.content.Context.*;
-import static androidx.core.content.ContextCompat.getSystemService;
 import static com.example.weather.MainActivity.DEFAULT_TEMP;
 
 public class GettingData {

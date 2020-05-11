@@ -1,25 +1,17 @@
 package com.example.weather;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-
-import android.app.DownloadManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -32,15 +24,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import data.CityDbHelper;
 
 import static com.example.weather.GettingData.key;
-import static com.example.weather.MainActivity.DEFAULT_TEMP;
 
 public class OtherCities extends AppCompatActivity {
     ProgressBar progressBar;
@@ -78,20 +67,6 @@ public class OtherCities extends AppCompatActivity {
         viewPager.setAdapter(adapter);
     }
 
-   /* @Override
-    protected void onResume() {
-        RequestData();
-        super.onResume();
-        final Handler handler=new Handler();
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                RequestData();
-                handler.postDelayed(this,10 *60*1000);
-            }
-        });
-    }
-*/
     public void RequestData() {
         fragments=new ArrayList<>();
         fragments.clear();

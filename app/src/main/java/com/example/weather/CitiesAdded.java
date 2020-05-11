@@ -1,8 +1,6 @@
 package com.example.weather;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import data.CityDbHelper;
-import data.CityModel;
+
 
 public class CitiesAdded extends RecyclerView.Adapter<CitiesAdded.ViewHolder> {
     CityDbHelper dbHelper;
