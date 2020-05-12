@@ -2,19 +2,22 @@ package com.example.weather;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.weather.Forecast.Forecast;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class WeatherView extends AppCompatActivity {
@@ -39,6 +42,17 @@ public class WeatherView extends AppCompatActivity {
         VerifyingViewItems();
         setViewItems();
         setonclickforicons();
+        List<List<String>> res=new ArrayList<>();
+        List<String> res2=new ArrayList<>();
+        Forecast forecast=new Forecast(this);
+        res = forecast.GetTodayForecast((long) 524901);
+        Log.i("asjfsfhksajf", String.valueOf(res.size()));
+        for (int i=0;i<res.size();++i){
+            res2= res.get(i);
+            for (int j=0;j<res2.size();++j){
+                Log.i("asjfsfhksajf",res2.get(j));
+            }
+        }
     }
 
     private void setonclickforicons() {

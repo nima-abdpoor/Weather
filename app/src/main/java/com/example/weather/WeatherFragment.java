@@ -1,9 +1,7 @@
 package com.example.weather;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,9 +37,6 @@ public class WeatherFragment extends Fragment {
     private int cityId;
     private String city;
     private String detail;
-
-    private static String URL="https://api.openweathermap.org/data/2.5/weather?" +
-            "id=%s&appid=b34d97936eaadfa405d3b9b18db6a0ff";
 
     public static WeatherFragment newInstance(Bundle args) {
         WeatherFragment fragment =new WeatherFragment();
