@@ -1,4 +1,4 @@
-package com.example.weather;
+package com.example.weather.mai;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -15,10 +15,20 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.weather.Forecast.Forecast;
 
-import java.util.ArrayList;
+import com.example.weather.Forecast.retrofit.Forecast;
+import com.example.weather.Forecast.retrofit.JsonPlaceHolderAPI;
+import com.example.weather.Forecast.retrofit.weather;
+import com.example.weather.R;
+
+import java.util.Date;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class WeatherView extends AppCompatActivity {
     static TextView temp,city,detail;
@@ -27,6 +37,8 @@ public class WeatherView extends AppCompatActivity {
     static ProgressBar progressBar;
     ImageButton home,search,other;
     GetLocation GetLocation;
+
+    int[] forecastargs={1,9,17,25,33};
 
     Double lon= 0.0 ;
     Double lat= 0.0;
@@ -42,17 +54,7 @@ public class WeatherView extends AppCompatActivity {
         VerifyingViewItems();
         setViewItems();
         setonclickforicons();
-        List<List<String>> res=new ArrayList<>();
-        List<String> res2=new ArrayList<>();
-        Forecast forecast=new Forecast(this);
-        res = forecast.GetTodayForecast((long) 524901);
-        Log.i("asjfsfhksajf", String.valueOf(res.size()));
-        for (int i=0;i<res.size();++i){
-            res2= res.get(i);
-            for (int j=0;j<res2.size();++j){
-                Log.i("asjfsfhksajf",res2.get(j));
-            }
-        }
+        Forecast();
     }
 
     private void setonclickforicons() {
@@ -135,6 +137,31 @@ public class WeatherView extends AppCompatActivity {
                     }
                 });
         builder.show();
+    }
+    private void Forecast() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.openweathermap.org/data/2.5/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        JsonPlaceHolderAPI jsonapi = retrofit.create(JsonPlaceHolderAPI.class);
+        Call<Forecast> call = jsonapi.getfrorecast((long) 524901,"b34d97936eaadfa405d3b9b18db6a0ff");
+        call.enqueue(new Callback<Forecast>() {
+            @Override
+            public void onResponse(Call<Forecast> call, Response<Forecast> response) {
+                Forecast forecast =response.body();
+                for (int i=0;i<forecastargs.length;++i){
+                    String icon =forecast.getList().get(forecastargs[i]).getWeather().get(0).getIcon();
+                    double temp =forecast.getList().get(forecastargs[i]).getMain().getTemp();
+                    String description =forecast.getList().get(forecastargs[i]).getWeather().get(0).getDescription();
+                    String date= String.valueOf(forecast.getList().get(forecastargs[i]).getDtTxt());
+                    Log.i("testforforecast","icon: "+icon+" | temp: "+temp+" | description: "+description+" | "+date.toString()+"\n\n");
+                }
+            }
+            @Override
+            public void onFailure(Call<Forecast> call, Throwable t) {
+                Log.i("afdhka",t.getMessage());
+            }
+        });
     }
 
     @Override

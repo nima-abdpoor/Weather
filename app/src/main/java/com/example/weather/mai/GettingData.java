@@ -1,4 +1,4 @@
-package com.example.weather;
+package com.example.weather.mai;
 
 import android.app.Notification;
 import android.content.Context;
@@ -16,6 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.weather.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,8 +26,8 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
-import static com.example.weather.MainActivity.DEFAULT_TEMP;
-import static com.example.weather.MainActivity.MyCity;
+import static com.example.weather.mai.MainActivity.DEFAULT_TEMP;
+import static com.example.weather.mai.MainActivity.MyCity;
 
 public class GettingData {
     NotificationManagerCompat notificationManager;

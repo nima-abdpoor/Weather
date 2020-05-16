@@ -58,14 +58,12 @@ public class CityDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CMD_CREATE_TABLE);
         db.execSQL(CMD_CREATE_MY_CITIES);
-        db.execSQL(CMD_CREATE_CURRENT_CITY);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS "+ TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS "+MY_CITIES_TABLE);
-        db.execSQL("DROP TABLE IF EXISTS "+MY_CITY);
         onCreate(db);
     }
     public void CreateCurrentCityTable(){

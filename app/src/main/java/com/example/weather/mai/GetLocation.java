@@ -1,4 +1,4 @@
-package com.example.weather;
+package com.example.weather.mai;
 
 import android.Manifest;
 import android.app.AlertDialog;

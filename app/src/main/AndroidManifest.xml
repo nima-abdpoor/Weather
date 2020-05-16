@@ -10,7 +10,7 @@
     <application
         android:versionCode = "1"
         android:versionName = "first"
-        android:name=".App"
+        android:name=".mai.App"
         android:noHistory="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -18,11 +18,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".OtherCities"></activity>
-        <activity android:name=".Activity_cities" />
-        <activity android:name=".SearchCity" />
-        <activity android:name=".WeatherView" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".mai.OtherCities"></activity>
+        <activity android:name=".mai.Activity_cities" />
+        <activity android:name=".mai.SearchCity" />
+        <activity android:name=".mai.WeatherView" />
+        <activity android:name=".mai.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

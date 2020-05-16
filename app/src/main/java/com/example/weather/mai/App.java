@@ -1,4 +1,4 @@
-package com.example.weather;
+package com.example.weather.mai;
 
 import android.app.Application;
 import android.content.SharedPreferences;

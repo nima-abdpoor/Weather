@@ -1,4 +1,4 @@
-package com.example.weather;
+package com.example.weather.mai;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +19,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.weather.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,7 +30,7 @@ import java.util.List;
 
 import data.CityDbHelper;
 
-import static com.example.weather.GettingData.key;
+import static com.example.weather.mai.GettingData.key;
 
 public class OtherCities extends AppCompatActivity {
     ProgressBar progressBar;

@@ -1,4 +1,4 @@
-package com.example.weather;
+package com.example.weather.mai;
 
 import android.os.Bundle;
 import android.text.Html;
@@ -12,8 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.android.volley.VolleyError;
+import com.example.weather.R;
 
-import static com.example.weather.MainActivity.DEFAULT_TEMP;
+import static com.example.weather.mai.MainActivity.DEFAULT_TEMP;
 
 public class WeatherFragment extends Fragment {
     static TextView City,temp, Detail;
