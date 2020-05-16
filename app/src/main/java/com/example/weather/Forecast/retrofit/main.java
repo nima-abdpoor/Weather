@@ -1,12 +1,16 @@
 package com.example.weather.Forecast.retrofit;
 
+import android.text.Html;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import static com.example.weather.mai.MainActivity.DEFAULT_TEMP;
 
 public class main {
     @SerializedName("temp")
     @Expose
-    private Double temp;
+    private double temp;
     @SerializedName("feels_like")
     @Expose
     private Double feelsLike;
@@ -32,12 +36,23 @@ public class main {
     @Expose
     private Double tempKf;
 
-    public Double getTemp() {
-        return temp;
+    public String getTemp() {
+        return getTempAverage(DEFAULT_TEMP);
     }
 
-    public void setTemp(Double temp) {
-        this.temp = temp;
+    public String getTempAverage(String type) {
+        int temp2= (int) temp;
+        switch (type) {
+            case "Kelvin":
+                return (String.valueOf(temp2));
+            case "Celsius":
+                return (String.valueOf((temp2 - 273)) + Html.fromHtml("&#8451;"));
+            case "Fahrenheit":
+                return String.valueOf((((temp2 - 273) * 1.8) + 32));
+            default:
+                break;
+        }
+        return String.valueOf(temp2);
     }
 
     public Double getFeelsLike() {
