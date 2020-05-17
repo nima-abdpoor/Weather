@@ -2,9 +2,12 @@ package com.example.weather.mai;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +22,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.weather.Forecast.retrofit.Forecast;
+import com.example.weather.Forecast.retrofit.JsonPlaceHolderAPI;
 import com.example.weather.R;
 
 import org.json.JSONArray;
@@ -29,6 +34,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import data.CityDbHelper;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.example.weather.mai.GettingData.key;
 
@@ -41,14 +50,19 @@ public class OtherCities extends AppCompatActivity {
     RequestQueue requestQueue;
     JsonObjectRequest request;
     ImageButton home,search,other;
+    Bundle bundle;
 
+    TextView[] fivedaystemp = new TextView[5];
+    TextView[] fivedaysdetail = new TextView[5];
+    TextView[] fivedaystime = new TextView[5];
+    ImageView[] fivedaysicon = new ImageView[5];
+    int[] forecastargs = {1, 9, 17, 25, 33};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_other_cities);
         VeryfingViewItems();
-        setonclickforicons();
         progressBar.setVisibility(View.VISIBLE);
         Init();
     }
@@ -69,6 +83,10 @@ public class OtherCities extends AppCompatActivity {
     }
 
     public void RequestData() {
+        ArrayList<String> icons=new ArrayList<>();
+        ArrayList<String> temps=new ArrayList<>();
+        ArrayList<String> details=new ArrayList<>();
+        ArrayList<String> times=new ArrayList<>();
         fragments=new ArrayList<>();
         fragments.clear();
         String uri=PrepareUri();
@@ -81,8 +99,8 @@ public class OtherCities extends AppCompatActivity {
                                 int cnt=response.getInt("cnt");
                                 JSONArray jsonArray=response.getJSONArray("list");
                                 for (int i=0;i<cnt;++i){
-                                    JSONObject res=jsonArray.getJSONObject(i);
                                     Bundle args=new Bundle();
+                                    JSONObject res=jsonArray.getJSONObject(i);
                                     args.putString("city",res.getString("name")+
                                             ", "+res.getJSONObject("sys").getString("country"));
                                     args.putString("tempA", String.valueOf(res.getJSONObject("main").getInt("temp")));
@@ -127,28 +145,6 @@ public class OtherCities extends AppCompatActivity {
         }
         urlResult.append("&APPID="+key);
         return String.valueOf(urlResult);
-    }
-    private void setonclickforicons() {
-        home.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(OtherCities.this,WeatherView.class);
-                startActivity(intent);
-            }
-        });
-        search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(OtherCities.this,SearchCity.class);
-                startActivity(intent);
-            }
-        });
-        other.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                refreshPage();
-            }
-        });
     }
     private void refreshPage() {
         Init();

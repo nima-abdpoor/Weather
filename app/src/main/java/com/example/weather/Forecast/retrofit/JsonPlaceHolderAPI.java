@@ -7,7 +7,13 @@ import retrofit2.http.Query;
 public interface JsonPlaceHolderAPI {
     @GET("forecast")
     Call<Forecast> getfrorecast(
-            @Query("id") Long cityid,
+            @Query("lat") double lat,
+            @Query("lon") double lon,
+            @Query("appid") String key
+    );
+    @GET("forecast")
+    Call<Forecast> getfrorecast(
+            @Query("id") String id,
             @Query("appid") String key
     );
 }

@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void CreateNotificationChannels() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            NotificationChannel mycity =new NotificationChannel(MyCity,MyCity, NotificationManager.IMPORTANCE_HIGH);
+            NotificationChannel mycity =new NotificationChannel(MyCity,MyCity, NotificationManager.IMPORTANCE_DEFAULT);
             mycity.setDescription("جونی ننت دستش نزن");
             NotificationManager manager=getSystemService(NotificationManager.class);
             manager.createNotificationChannel(mycity);

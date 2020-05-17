@@ -2,7 +2,7 @@ package com.example.weather.mai;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,7 +27,6 @@ public class Activity_cities extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cities);
         VerifingViewItems();
-        setonclickforicons();
         setData();
     }
 
@@ -40,29 +39,6 @@ public class Activity_cities extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         cityAdded =new CitiesAdded(MyCities,this);
         recyclerView.setAdapter(cityAdded);
-    }
-
-    private void setonclickforicons() {
-        home.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(Activity_cities.this,WeatherView.class);
-                startActivity(intent);
-            }
-        });
-        search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                refreshPage();
-            }
-        });
-        other.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(Activity_cities.this,OtherCities.class);
-                startActivity(intent);
-            }
-        });
     }
 
     private void refreshPage() {

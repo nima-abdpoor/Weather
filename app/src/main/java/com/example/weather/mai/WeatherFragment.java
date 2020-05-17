@@ -2,6 +2,7 @@ package com.example.weather.mai;
 
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,14 +13,23 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.android.volley.VolleyError;
+import com.example.weather.Forecast.retrofit.Forecast;
+import com.example.weather.Forecast.retrofit.JsonPlaceHolderAPI;
 import com.example.weather.R;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.example.weather.mai.MainActivity.DEFAULT_TEMP;
 
 public class WeatherFragment extends Fragment {
     static TextView City,temp, Detail;
     static ImageView Icon;
-
      private String ID="";
 
     private double longitude ;
@@ -53,6 +63,7 @@ public class WeatherFragment extends Fragment {
         setTempAverage(Integer.parseInt(args.getString("tempA")));
         setDetail(args.getString("description"));
         setIcon(args.getString("icon"));
+        List<String> list = args.getStringArrayList("icons");
     }
 
     @Nullable
@@ -66,7 +77,6 @@ public class WeatherFragment extends Fragment {
         SetView();
         return view;
     }
-
 
 
     private void SetView(){

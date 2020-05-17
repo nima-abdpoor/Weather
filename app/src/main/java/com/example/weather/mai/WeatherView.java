@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -31,7 +33,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class WeatherView extends AppCompatActivity {
     static TextView temp, city, detail;
-    TextView time1, time2, time3, time4, time5;
+    TextView time;
     TextView[] fivedaystemp = new TextView[5];
     TextView[] fivedaysdetail = new TextView[5];
     TextView[] fivedaystime = new TextView[5];
@@ -44,7 +46,7 @@ public class WeatherView extends AppCompatActivity {
     ImageButton home, search, other;
     GetLocation GetLocation;
 
-    int[] forecastargs = {1, 9, 17, 25, 33};
+    int[] forecastargs = {2, 10, 18, 26, 34};
 
     Double lon = 0.0;
     Double lat = 0.0;
@@ -59,32 +61,8 @@ public class WeatherView extends AppCompatActivity {
         setContentView(R.layout.activity_weather_view);
         VerifyingViewItems();
         setViewItems();
-        setonclickforicons();
-        Forecast();
     }
 
-    private void setonclickforicons() {
-        home.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                refreshPage();
-            }
-        });
-        search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(WeatherView.this, SearchCity.class);
-                startActivity(intent);
-            }
-        });
-        other.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(WeatherView.this, OtherCities.class);
-                startActivity(intent);
-            }
-        });
-    }
 
     private void GettingLocation() {
         List<Double> list;
@@ -92,6 +70,7 @@ public class WeatherView extends AppCompatActivity {
         list = currentLocation.getcoordinates();
         lat = list.get(0);
         lon = list.get(1);
+        Forecast(lat,lon);
         setViewItems();
     }
 
@@ -109,16 +88,17 @@ public class WeatherView extends AppCompatActivity {
         home = findViewById(R.id.home);
         search = findViewById(R.id.search);
         other = findViewById(R.id.other);
+        time=findViewById(R.id.time);
         fivedaystemp[0] = findViewById(R.id.temp_1);
         fivedaystemp[1] = findViewById(R.id.temp_2);
         fivedaystemp[2] = findViewById(R.id.temp_3);
         fivedaystemp[3] = findViewById(R.id.temp_4);
         fivedaystemp[4] = findViewById(R.id.temp_5);
-        fivedaystime[0] = findViewById(R.id.time1);
-        fivedaystime[1] = findViewById(R.id.time2);
-        fivedaystime[2] = findViewById(R.id.time3);
-        fivedaystime[3] = findViewById(R.id.time4);
-        fivedaystime[4] = findViewById(R.id.time5);
+        fivedaystime[0] = findViewById(R.id.time_1);
+        fivedaystime[1] = findViewById(R.id.time_2);
+        fivedaystime[2] = findViewById(R.id.time_3);
+        fivedaystime[3] = findViewById(R.id.time_4);
+        fivedaystime[4] = findViewById(R.id.time_5);
         fivedaysdetail[0] = findViewById(R.id.detail_1);
         fivedaysdetail[1] = findViewById(R.id.detail_2);
         fivedaysdetail[2] = findViewById(R.id.detail_3);
@@ -166,13 +146,13 @@ public class WeatherView extends AppCompatActivity {
         builder.show();
     }
 
-    private void Forecast() {
+    private void Forecast(double lat,double lon) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.openweathermap.org/data/2.5/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         JsonPlaceHolderAPI jsonapi = retrofit.create(JsonPlaceHolderAPI.class);
-        Call<Forecast> call = jsonapi.getfrorecast((long) 524901, "b34d97936eaadfa405d3b9b18db6a0ff");
+        Call<Forecast> call = jsonapi.getfrorecast(lat,lon, "b34d97936eaadfa405d3b9b18db6a0ff");
         call.enqueue(new Callback<Forecast>() {
             @Override
             public void onResponse(Call<Forecast> call, Response<Forecast> response) {
@@ -180,10 +160,11 @@ public class WeatherView extends AppCompatActivity {
                 for (int i = 0; i < forecastargs.length; ++i) {
                     getIcon(forecast.getList().get(forecastargs[i]).getWeather().get(0).getIcon(), i);
                     fivedaystemp[i].setText(forecast.getList().get(forecastargs[i]).getMain().getTemp());
-                    fivedaysdetail[i].setText(forecast.getList().get(forecastargs[i]).getWeather().get(0).getDescription());
+                    fivedaysdetail[i].setText(forecast.getList().get(forecastargs[i]).getWeather().get(0).getDescription().replace(" ","\n"));
                     fivedaystime[i].setText(forecast.getList().get(forecastargs[i]).getDtTxt().substring(5, 10));
-                    Log.i("testforforecast", "icon: " + icon + " | \n\n");
+                    //Log.i("testforforecast", forecast.getList().get(forecastargs[i]).getDtTxt().substring(11,16));
                 }
+                time.setText(forecast.getList().get(forecastargs[1]).getDtTxt().substring(11,16));
             }
 
             @Override
@@ -203,6 +184,19 @@ public class WeatherView extends AppCompatActivity {
                 getLocation();
             }
         }, 1000);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add("Other").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent intent=new Intent(WeatherView.this,OtherCities.class);
+                startActivity(intent);
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
     }
 
     public void getLocation() {
