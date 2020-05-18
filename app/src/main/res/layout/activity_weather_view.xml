@@ -1,20 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ScrollView01"
+    android:background="@drawable/damavand"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
 
-        <androidx.cardview.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
+        <androidx.cardview.widget.CardView
             android:id="@+id/weather_now"
+            android:alpha="0.8"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginHorizontal="20dp"
             android:elevation="10dp"
             app:cardCornerRadius="8dp">
 
@@ -76,11 +82,13 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
+            android:alpha="0.8"
             android:layout_below="@id/weather_now"
             android:id="@+id/today_forecast"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginHorizontal="20dp"
             android:elevation="10dp"
             app:cardCornerRadius="8dp">
             <GridLayout
@@ -301,11 +309,14 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
+            android:alpha="0.8"
             android:id="@+id/fivedays_forecast"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/today_forecast"
-            android:layout_margin="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginHorizontal="20dp"
             android:elevation="10dp"
             app:cardCornerRadius="8dp">
 
@@ -548,3 +559,4 @@
         </androidx.cardview.widget.CardView>
     </RelativeLayout>
 </ScrollView>
+</RelativeLayout>

@@ -52,8 +52,8 @@ public class WeatherView extends AppCompatActivity {
     ImageButton home, search, other;
     GetLocation GetLocation;
 
-    public static int[] fivedaysforecastargs = {2, 10, 18, 26, 34};
-    public static int[] weekforecastargs = {3, 4, 5, 6, 7};
+    public static int[] fivedaysforecastargs = {1, 9, 17, 25, 33};
+    public static int[] weekforecastargs = {2, 3, 4, 5, 6};
 
     Double lon = 0.0;
     Double lat = 0.0;

@@ -27,6 +27,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.example.weather.mai.GettingData.KEY;
 import static com.example.weather.mai.MainActivity.DEFAULT_TEMP;
+import static com.example.weather.mai.WeatherView.fivedaysforecastargs;
 import static com.example.weather.mai.WeatherView.weekforecastargs;
 
 public class WeatherFragment extends Fragment {
@@ -70,6 +71,7 @@ public class WeatherFragment extends Fragment {
     @Override
     public void onResume() {
         WeekForecast(id);
+        FivedaysForecast(id);
         super.onResume();
     }
 
@@ -82,6 +84,7 @@ public class WeatherFragment extends Fragment {
         setDetail(args.getString("description"));
         setIcon(args.getString("icon"));
         id = args.getString("id");
+        FivedaysForecast(id);
         WeekForecast(id);
         List<String> list = args.getStringArrayList("icons");
     }
@@ -94,6 +97,7 @@ public class WeatherFragment extends Fragment {
         temp=view.findViewById(R.id.temp);
         Detail =view.findViewById(R.id.detail);
         Icon =view.findViewById(R.id.icon);
+        time=view.findViewById(R.id.time);
         weektime[0] = view.findViewById(R.id.time1);
         weektime[1] = view.findViewById(R.id.time2);
         weektime[2] = view.findViewById(R.id.time3);
@@ -114,6 +118,26 @@ public class WeatherFragment extends Fragment {
         weekicon[2] = view.findViewById(R.id.icon_3);
         weekicon[3] = view.findViewById(R.id.icon_4);
         weekicon[4] = view.findViewById(R.id.icon_5);
+        fivedaystemp[0] = view.findViewById(R.id.temp_1);
+        fivedaystemp[1] = view.findViewById(R.id.temp_2);
+        fivedaystemp[2] = view.findViewById(R.id.temp_3);
+        fivedaystemp[3] = view.findViewById(R.id.temp_4);
+        fivedaystemp[4] = view.findViewById(R.id.temp_5);
+        fivedaystime[0] = view.findViewById(R.id.time_1);
+        fivedaystime[1] = view.findViewById(R.id.time_2);
+        fivedaystime[2] = view.findViewById(R.id.time_3);
+        fivedaystime[3] = view.findViewById(R.id.time_4);
+        fivedaystime[4] = view.findViewById(R.id.time_5);
+        fivedaysdetail[0] = view.findViewById(R.id.detail_1);
+        fivedaysdetail[1] = view.findViewById(R.id.detail_2);
+        fivedaysdetail[2] = view.findViewById(R.id.detail_3);
+        fivedaysdetail[3] = view.findViewById(R.id.detail_4);
+        fivedaysdetail[4] = view.findViewById(R.id.detail_5);
+        fivedaysicon[0] = view.findViewById(R.id.icon1);
+        fivedaysicon[1] = view.findViewById(R.id.icon2);
+        fivedaysicon[2] = view.findViewById(R.id.icon3);
+        fivedaysicon[3] = view.findViewById(R.id.icon4);
+        fivedaysicon[4] = view.findViewById(R.id.icon5);
         SetView();
         return view;
     }
@@ -123,6 +147,33 @@ public class WeatherFragment extends Fragment {
         temp.setText(getTempAverage(DEFAULT_TEMP));
         Detail.setText(getDetail());
         getIcon();
+    }
+    private void FivedaysForecast(String id) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.openweathermap.org/data/2.5/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        JsonPlaceHolderAPI jsonapi = retrofit.create(JsonPlaceHolderAPI.class);
+        Call<Forecast> call = jsonapi.getfrorecast(id, KEY);
+        call.enqueue(new Callback<Forecast>() {
+            @Override
+            public void onResponse(Call<Forecast> call, Response<Forecast> response) {
+                Forecast forecast = response.body();
+                for (int i = 0; i < fivedaysforecastargs.length; ++i) {
+                    getIcon(forecast.getList().get(fivedaysforecastargs[i]).getWeather().get(0).getIcon(), i, true);
+                    fivedaystemp[i].setText(forecast.getList().get(fivedaysforecastargs[i]).getMain().getTemp());
+                    fivedaysdetail[i].setText(forecast.getList().get(fivedaysforecastargs[i]).getWeather().get(0).getDescription().replace(" ", "\n"));
+                    fivedaystime[i].setText(forecast.getList().get(fivedaysforecastargs[i]).getDtTxt().substring(5, 10));
+                    //Log.i("testforforecast", forecast.getList().get(forecastargs[i]).getDtTxt().substring(11,16));
+                }
+                time.setText(forecast.getList().get(fivedaysforecastargs[1]).getDtTxt().substring(11, 16));
+            }
+
+            @Override
+            public void onFailure(Call<Forecast> call, Throwable t) {
+                Log.i("afdhka", t.getMessage());
+            }
+        });
     }
     private void WeekForecast(String id) {
         Retrofit retrofit = new Retrofit.Builder()

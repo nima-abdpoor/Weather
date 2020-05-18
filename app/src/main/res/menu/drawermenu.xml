@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<item android:id="@+id/mycities" android:title="My Cities" android:icon="@drawable/ic_dashboard_black_24dp"/>
+    <item android:id="@+id/add" android:title="Add City" android:icon="@drawable/ic_youtube_searched_for_black_24dp"/>
+    <item android:id="@+id/manage" android:title="Manage Cities" android:icon="@drawable/ic_delete_black_24dp"/>
+    <item android:id="@+id/setting" android:title="Setting" android:icon="@drawable/ic_settings_black_24dp"/>
+    <item android:id="@+id/logout" android:title="Logout" android:icon="@drawable/ic_arrow_back_black_24dp"/>
+</menu>
