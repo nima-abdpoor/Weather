@@ -53,8 +53,8 @@ public class GettingData {
     Double lat = 0.0;
     Double lon = 0.0;
 
-    public static final String key = "b34d97936eaadfa405d3b9b18db6a0ff";
-    public static String URL = "https://api.openweathermap.org/data/2.5/weather?lat=%1$s&lon=%2$s&appid=" + key;
+    public static final String KEY = "b34d97936eaadfa405d3b9b18db6a0ff";
+    public static String URL = "https://api.openweathermap.org/data/2.5/weather?lat=%1$s&lon=%2$s&appid=" + KEY;
 
 
     public GettingData(Context context, Double lon, Double lat) {

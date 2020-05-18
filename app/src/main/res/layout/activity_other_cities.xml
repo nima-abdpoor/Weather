@@ -20,46 +20,4 @@
             android:layout_marginTop="100dp"
             android:visibility="invisible"
             />
-        <RelativeLayout
-            android:id="@+id/appmenu"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_margin="2dp"
-            android:layout_alignParentBottom="true"
-            android:orientation="horizontal"
-            >
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_alignParentTop="true"
-                    android:background="#DAE2E3" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp">
-                        <ImageButton
-                            android:id="@+id/home"
-                            android:layout_weight="1"
-                            android:layout_height="match_parent"
-                            android:layout_width="match_parent"
-                            android:background="@drawable/home"
-                            />
-                        <ImageButton
-                            android:id="@+id/search"
-                            android:layout_weight="1"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/search"
-                            />
-
-                        <ImageButton
-                            android:id="@+id/other"
-                            android:layout_weight="1"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/more"
-                            />
-                </LinearLayout>
-        </RelativeLayout>
-
 </RelativeLayout>

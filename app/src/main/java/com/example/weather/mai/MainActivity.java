@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                 != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    100);
+                    1);
         }
         else {
             Intent intent = new Intent(MainActivity.this, WeatherView.class);
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode==100){
+        if(requestCode == 1){
             Log.i("testrequest","true");
             if(grantResults[0]==PackageManager.PERMISSION_GRANTED)
             {
